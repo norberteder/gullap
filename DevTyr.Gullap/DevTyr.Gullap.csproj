@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6848B621-476C-4509-8BBF-3B887E765A57}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DevTyr.Gullap</RootNamespace>
+    <AssemblyName>DevTyr.Gullap</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="MarkdownSharp">
+      <HintPath>..\Dependencies\MarkdownSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Nustache.Core">
+      <HintPath>..\Dependencies\Nustache.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="ConverterOptions.cs" />
+    <Compile Include="Menu\MenuBuilder.cs" />
+    <Compile Include="Menu\MainMenu.cs" />
+    <Compile Include="Menu\MenuItem.cs" />
+    <Compile Include="Menu\MenuCategory.cs" />
+    <Compile Include="ConverterResult.cs" />
+    <Compile Include="Parser\IParser.cs" />
+    <Compile Include="Parser\ParsedFileInfo.cs" />
+    <Compile Include="Parser\ParserKeys.cs" />
+    <Compile Include="Templating\ITemplater.cs" />
+    <Compile Include="Parser\Markdown\MarkdownParser.cs" />
+    <Compile Include="Templating\Nustache\NustacheTemplater.cs" />
+    <Compile Include="Guard.cs" />
+    <Compile Include="Extensions\DirectoryExtensions.cs" />
+    <Compile Include="SiteGenerator.cs" />
+    <Compile Include="SitePaths.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Menu\" />
+    <Folder Include="Parser\" />
+    <Folder Include="Templating\" />
+    <Folder Include="Templating\Nustache\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+</Project>
