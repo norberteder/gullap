@@ -31,5 +31,6 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = DevTyr.Gullap.GullapConsole\DevTyr.Gullap.GullapConsole.csproj
+		version = 1.0.1
 	EndGlobalSection
 EndGlobal

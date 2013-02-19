@@ -10,6 +10,7 @@
     <RootNamespace>DevTyr.Gullap.GullapConsole</RootNamespace>
     <AssemblyName>GullapConsole</AssemblyName>
     <StartupObject>DevTyr.Gullap.GullapConsole.MainClass</StartupObject>
+    <ReleaseVersion>1.0.1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>

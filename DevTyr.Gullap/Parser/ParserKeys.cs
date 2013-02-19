@@ -17,7 +17,8 @@ namespace DevTyr.Gullap.Parser
 			new KeyValuePair<string, string>("MenuCategory", "MenuCategory:"),
 			new KeyValuePair<string, string>("MenuTitle", "MenuTitle:"),
 			new KeyValuePair<string, string>("Sidebar", "Sidebar:"),
-			new KeyValuePair<string, string>("SidebarTitle", "SidebarTitle:")
+			new KeyValuePair<string, string>("SidebarTitle", "SidebarTitle:"),
+			new KeyValuePair<string, string>("Keywords", "Keywords:")
 		};
 	}
 }
