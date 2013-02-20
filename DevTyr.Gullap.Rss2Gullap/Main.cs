@@ -4,6 +4,7 @@ using System.IO;
 using DevTyr.Gullap.Parser;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DevTyr.Gullap.Rss2Gullap
 {
@@ -46,8 +47,8 @@ namespace DevTyr.Gullap.Rss2Gullap
 				builder.AppendLine(ParserKeys.InfoEnd);
 				builder.AppendLine(ConvertToMarkdown(info.ParsedContent));
 				// just for comparison
-				builder.AppendLine(ParserKeys.InfoEnd);
-				builder.AppendLine(info.ParsedContent);
+				//builder.AppendLine(ParserKeys.InfoEnd);
+				//builder.AppendLine(info.ParsedContent);
 
 				File.WriteAllText(filename, builder.ToString());
 
@@ -66,16 +67,32 @@ namespace DevTyr.Gullap.Rss2Gullap
 			bool parsingTag = false;
 			bool wasNewParagraph = false;
 			bool isWithinBlockquote = false;
+            bool isWithinLink = false;
+            bool isWithinImage = false;
+            bool isInnerValue = false;
 
 			foreach (char c in trimmedHtml) {
-				if (c == '<') {
+                if (parsingTag && c == '"')
+                {
+                    isInnerValue = !isInnerValue;
+                }
+                if (currentTag.StartsWith("a"))
+                    isWithinLink = true;
+                if (currentTag.StartsWith("img"))
+                    isWithinImage = true;
+				if (c == '<' && !isWithinLink && !isWithinImage) {
 					// tag starts
 					parsingTag = true;
 					currentTag = "";
 				} else if (c == '/' && parsingTag) {
-					isClosingTag = true;
+                    if (!isInnerValue)
+					    isClosingTag = true;
+                    if (isWithinLink || isWithinImage)
+                        currentTag += c;
 				} else if (c == '>' && parsingTag) {
 					// tag ends
+                    if (isWithinLink || isWithinImage)
+                        currentTag += ">";
 					if (currentTag == "b" || currentTag == "strong")
 						markdown += "**";
 					if (currentTag == "i")
@@ -150,17 +167,49 @@ namespace DevTyr.Gullap.Rss2Gullap
 						}
 						if (currentTag == "pre" || currentTag == "code")
 							markdown += "\x0060";
+                        if (currentTag.StartsWith("a"))
+                        {
+                            Regex hrefRegex = new Regex("href=\"(.*?)\"", RegexOptions.IgnoreCase);
+                            Regex titleRegex = new Regex("title=\"(.*?)\"", RegexOptions.IgnoreCase);
+                            Regex valueRegex = new Regex(">(.*?)<", RegexOptions.IgnoreCase);
+
+                            var hrefMatch = hrefRegex.Match(currentTag);
+                            var titleMatch = titleRegex.Match(currentTag);
+                            var valueMatch = valueRegex.Match(currentTag);
+
+                            var value = string.Format("[{0}]({1} \"{2}\")", valueMatch.Groups[1].Value, hrefMatch.Groups[1].Value, titleMatch.Groups[1].Value);
+                            markdown += value;
+                            isWithinLink = false;
+                        }
+                        if (currentTag.StartsWith("img"))
+                        {
+                            Regex srcRegex = new Regex("src=\"(.*?)\"", RegexOptions.IgnoreCase);
+                            Regex titleRegex = new Regex("title=\"(.*?)\"", RegexOptions.IgnoreCase);
+                            Regex altRegex = new Regex("alt=\"(.*?)\"", RegexOptions.IgnoreCase);
+
+                            var srcMatch = srcRegex.Match(currentTag);
+                            var titleMatch = titleRegex.Match(currentTag);
+                            var altMatch = altRegex.Match(currentTag);
+
+                            var value = string.Format("![{0}]({1} \"{2}\")", titleMatch.Groups[1].Value, srcMatch.Groups[1].Value, altMatch.Groups[1].Value);
+                            markdown += value;
+                            isWithinImage = false;
+                        }
+
+                        if (!isWithinLink && !isWithinImage)
+                        {
+                            lastTag = currentTag;
+                            currentTag = "";
+                        }
 					}
 
-					if (isClosingTag) {
-						lastTag = currentTag;
-						currentTag = "";
-					}
-
-					parsingTag = false;
-					isClosingTag = false;
+                    if (!isWithinLink && !isWithinImage)
+                    {
+                        parsingTag = false;
+                        isClosingTag = false;
+                    }
 				} else {
-					if (parsingTag && c != ' ')
+                    if (parsingTag && (isWithinLink || isWithinImage || c != ' '))
 						currentTag += c;
 					else {
 						if (!wasNewParagraph)
