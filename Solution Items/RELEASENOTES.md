@@ -1,5 +1,9 @@
 # RELEASE NOTES
 
+**1.0.1**
+
+- Added support of Date
+
 **1.0**
 
 - Support Markdown (default, possible to extend)

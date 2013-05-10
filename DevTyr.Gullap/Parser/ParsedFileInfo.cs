@@ -18,6 +18,7 @@ namespace DevTyr.Gullap.Parser
 		public string MenuCategory { get; set; }
 		public string Sidebar { get; set; }
 		public string SidebarTitle { get; set; }
+		public string Date { get;set;}
 
 		public string ParsedContent { get; set; }
 

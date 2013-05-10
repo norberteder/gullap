@@ -118,7 +118,7 @@ namespace DevTyr.Gullap
 
 				var sidebarItems = menu.GetSidebarItems(info.Sidebar);
 
-				var templateData = new { content = info.ParsedContent, menu = menu, title = info.Title, description = info.Description, author = info.Author, sidebarheader = info.Sidebar, sidebaritems = sidebarItems, keywords = info.Keywords };
+				var templateData = new { content = info.ParsedContent, menu = menu, title = info.Title, date = info.Date, description = info.Description, author = info.Author, sidebarheader = info.Sidebar, sidebaritems = sidebarItems, keywords = info.Keywords };
 
 				var result = internalTemplater.Transform (Paths.TemplatePath, info.Template, templateData);
 
