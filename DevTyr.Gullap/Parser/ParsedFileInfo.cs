@@ -18,7 +18,8 @@ namespace DevTyr.Gullap.Parser
 		public string MenuCategory { get; set; }
 		public string Sidebar { get; set; }
 		public string SidebarTitle { get; set; }
-		public string Date { get;set;}
+		public string Date { get; set;}
+		public string Directory { get; set;}
 
 		public string ParsedContent { get; set; }
 
@@ -38,11 +39,27 @@ namespace DevTyr.Gullap.Parser
 				
 				string sourceExtension = Path.GetExtension (FileName);
 				if (sourceExtension.ToLowerInvariant () != ".html") {
-					return Path.GetFileName(FileName).Replace (sourceExtension, ".html");
+					return GetTargetFileName(Path.GetFileName(FileName).Replace (sourceExtension, ".html"));
 				} else {
-					return FileName;
+					return GetTargetFileName(FileName);
 				}
 			}
+		}
+
+		private string GetTargetFileName(string fileName) 
+		{
+			if (!string.IsNullOrWhiteSpace (this.Directory))
+				return Path.Combine (this.Directory, fileName);
+			return fileName;
+		}
+
+		private string GetTargetPath(string fileName) 
+		{
+			if (!string.IsNullOrWhiteSpace(this.Directory)) 
+			{
+				return Path.Combine (this.Directory, fileName);
+			}
+			return fileName;
 		}
 
 		public bool ShouldBeGenerated {

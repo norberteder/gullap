@@ -104,7 +104,7 @@ namespace DevTyr.Gullap
 		{
 			if (!Directory.Exists (targetPath)) 
 			{
-				Directory.CreateDirectory(targetPath);
+				Directory.CreateDirectory(Path.Combine(Paths.OutputPath, targetPath));
 			}
 		}
 
@@ -112,6 +112,7 @@ namespace DevTyr.Gullap
 		{
 			if (info.ShouldBeGenerated) {
 				var directoryName = Path.GetDirectoryName (info.TargetFileName);
+				Console.WriteLine (info.TargetFileName);
 				if (string.IsNullOrEmpty (directoryName))
 					directoryName = System.Environment.CurrentDirectory;
 				EnsureTargetPath (directoryName);

@@ -80,6 +80,7 @@ namespace DevTyr.Gullap.GullapConsole
 
 	    private static void ShowInfo() {
 			Console.WriteLine ("DevTyr Gullap");
+			Console.WriteLine ("http://devtyr.com");
 		}
 	}
 }

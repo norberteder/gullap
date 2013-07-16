@@ -20,7 +20,7 @@ namespace DevTyr.Gullap.Menu
 			foreach (var rooty in rootElements) {
 				MenuItem item = new MenuItem ();
 				item.Name = string.IsNullOrWhiteSpace(rooty.MenuTitle) ? rooty.Title : rooty.MenuTitle;
-				item.Link = rooty.Link ?? Path.GetFileName (rooty.TargetFileName);
+				item.Link = rooty.Link ?? "/" + Path.GetFileName (rooty.TargetFileName);
 				item.Sidebar = rooty.Sidebar;
 				item.SidebarTitle = rooty.SidebarTitle;
 				menu.Items.Add (item);
@@ -39,7 +39,7 @@ namespace DevTyr.Gullap.Menu
 			foreach(var child in children) {
 				MenuItem item = new MenuItem();
 				item.Name = string.IsNullOrWhiteSpace(child.MenuTitle) ? child.Title : child.MenuTitle;
-				item.Link = child.Link ?? Path.GetFileName(child.TargetFileName);
+				item.Link = child.Link ?? "/" + child.TargetFileName.Replace("\\", "/");
 				item.Sidebar = child.Sidebar;
 				item.SidebarTitle = child.SidebarTitle;
 				
