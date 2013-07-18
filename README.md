@@ -55,6 +55,7 @@ Each Markdown file has to contain one or more meta tags. They are important for 
 	Link 			A link to a resource
 	Date			Creation/update date of the page
 	Directory		Output directory (relativ) for the page 
+	Keywords 		Keywords for your page
 
 Not all meta tags have to be used. `Title`, `Description` and `Author` are only important if the page results in a real HTML transformation (this is not the case if `Link` is in use). The `Sidebar*` tags are only useful if you have a sidebar defined in your templates and access the exported variables.
 
@@ -71,7 +72,8 @@ There is one template that MUST exist: `page.template`. This is the default temp
 	author 			Author of the page
 	sidebarheader	Header of the sidebar (defined by `Sidebar` meta tag)
 	sidebaritems 	Items for your sidebar
-	date		Date of the page
+	date			Date of the page
+	keywords 		Keywords of the page
 
 Most of them are single values, except `menu` and `sidebaritems`.
 
