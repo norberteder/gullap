@@ -1,5 +1,3 @@
-using System;
-
 namespace DevTyr.Gullap.Templating
 {
 	public interface ITemplater

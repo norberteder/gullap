@@ -16,7 +16,7 @@ namespace DevTyr.Gullap.GullapConsole
 		{
 			ShowInfo ();
 
-			Options cmdOptions = new Options ();
+			var cmdOptions = new Options ();
 
 			foreach (var arg in args) {
 				if (arg == "-i") {
@@ -36,17 +36,18 @@ namespace DevTyr.Gullap.GullapConsole
 
 			if (string.IsNullOrWhiteSpace (cmdOptions.SitePath) || (!cmdOptions.GenerateSite && !cmdOptions.InitializeSite)) {
 				ShowHelp ();
-				System.Environment.Exit (1);
+				Environment.Exit (1);
 			}
 
-			ConverterOptions options = new ConverterOptions () {
+			var options = new ConverterOptions
+			{
 				SitePath = cmdOptions.SitePath
 			};
 			
-			Stopwatch watch = new Stopwatch ();
+			var watch = new Stopwatch ();
 			watch.Start ();
 			
-			Converter converter = new Converter (options);
+			var converter = new Converter (options);
 
 			ConverterResult result = null;
 			if (cmdOptions.GenerateSite) {
@@ -63,7 +64,7 @@ namespace DevTyr.Gullap.GullapConsole
 					Console.WriteLine (result.ErrorMessage);
 				} else {
 					if (result.SuccessMessages != null) {
-						foreach (string msg in result.SuccessMessages)
+						foreach (var msg in result.SuccessMessages)
 							Console.WriteLine (msg);
 					}
 				}

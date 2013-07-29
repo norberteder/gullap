@@ -13,11 +13,12 @@ namespace DevTyr.Gullap
 		public static void NotNullOrEmpty (object obj, string argumentName)
 		{
 			NotNull (obj, argumentName);
-			if (obj is String) {
-				String val = (String)obj;
-				if (string.IsNullOrWhiteSpace(val))
-					throw new ArgumentException(argumentName);
-			}
+		    
+            if (!(obj is String)) return;
+
+		    var val = (String)obj;
+		    if (string.IsNullOrWhiteSpace(val))
+		        throw new ArgumentException(argumentName);
 		}
 	}
 }

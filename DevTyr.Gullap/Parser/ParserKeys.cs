@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace DevTyr.Gullap.Parser
@@ -7,7 +6,8 @@ namespace DevTyr.Gullap.Parser
 	{
 		public static string InfoEnd = "-----";
 		
-		public static List<KeyValuePair<string, string>> Mappings = new List<KeyValuePair<string, string>>() {
+		public static List<KeyValuePair<string, string>> Mappings = new List<KeyValuePair<string, string>>
+		{
 			new KeyValuePair<string, string>("Title", "Title:"),
 			new KeyValuePair<string, string>("Description", "Description:"),
 			new KeyValuePair<string, string>("Author", "Author:"),

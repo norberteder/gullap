@@ -1,26 +1,24 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DevTyr.Gullap.Menu
 {
 	internal class MenuItem 
 	{
-		private List<MenuItem> subItems = new List<MenuItem>();
-		private List<MenuCategory> categories = new List<MenuCategory>();
-		private string sidebarTitle = null;
+		private readonly List<MenuItem> subItems = new List<MenuItem>();
+		private readonly List<MenuCategory> categories = new List<MenuCategory>();
+		private string sidebarTitle;
 
 		public string Name { get; set; }
 		public string Link { get; set; }
 		public string Sidebar { get; set; }
 
 		public string SidebarTitle { 
-			get {
-				if (string.IsNullOrWhiteSpace (sidebarTitle))
-					return Name;
-				else
-					return sidebarTitle;
+			get
+			{
+			    return string.IsNullOrWhiteSpace (sidebarTitle) ? Name : sidebarTitle;
 			}
-			set {
+		    set {
 				sidebarTitle = value;
 			}
 		}
@@ -39,13 +37,7 @@ namespace DevTyr.Gullap.Menu
 
 		public MenuCategory GetCategory (string name)
 		{
-			if (Categories.Count > 0) {
-				foreach(var category in Categories) {
-					if (category.Name == name)
-						return category;
-				}
-			}
-			return null;
+		    return Categories.Count > 0 ? Categories.FirstOrDefault(category => category.Name == name) : null;
 		}
 	}
 }

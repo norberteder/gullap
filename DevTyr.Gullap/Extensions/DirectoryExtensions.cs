@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace DevTyr.Gullap.Extensions
@@ -7,8 +6,8 @@ namespace DevTyr.Gullap.Extensions
 	{
 		public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
 		{
-			DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-			DirectoryInfo[] dirs = dir.GetDirectories();
+			var dir = new DirectoryInfo(sourceDirName);
+			var dirs = dir.GetDirectories();
 			
 			if (!dir.Exists)
 			{
@@ -20,21 +19,20 @@ namespace DevTyr.Gullap.Extensions
 				Directory.CreateDirectory(destDirName);
 			}
 			
-			FileInfo[] files = dir.GetFiles();
-			foreach (FileInfo file in files)
+			var files = dir.GetFiles();
+			foreach (var file in files)
 			{
-				string temppath = Path.Combine(destDirName, file.Name);
+				var temppath = Path.Combine(destDirName, file.Name);
 				file.CopyTo(temppath, false);
 			}
-			
-			if (copySubDirs)
-			{
-				foreach (DirectoryInfo subdir in dirs)
-				{
-					string temppath = Path.Combine(destDirName, subdir.Name);
-					DirectoryCopy(subdir.FullName, temppath, copySubDirs);
-				}
-			}
+
+		    if (!copySubDirs) return;
+
+		    foreach (var subdir in dirs)
+		    {
+		        var temppath = Path.Combine(destDirName, subdir.Name);
+		        DirectoryCopy(subdir.FullName, temppath, true);
+		    }
 		}
 	}
 }

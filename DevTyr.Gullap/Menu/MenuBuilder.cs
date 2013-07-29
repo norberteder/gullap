@@ -1,29 +1,27 @@
-using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using DevTyr.Gullap.Parser;
 
 namespace DevTyr.Gullap.Menu
 {
 	internal class MenuBuilder
 	{
-		public MenuBuilder ()
+	    public MainMenu Build (List<ParsedFileInfo> infos)
 		{
-		}
-
-		public MainMenu Build (List<ParsedFileInfo> infos)
-		{
-			MainMenu menu = new MainMenu ();
+			var menu = new MainMenu ();
 
 			var rootElements = GetRootElements (infos);
 
 			foreach (var rooty in rootElements) {
-				MenuItem item = new MenuItem ();
-				item.Name = string.IsNullOrWhiteSpace(rooty.MenuTitle) ? rooty.Title : rooty.MenuTitle;
-				item.Link = rooty.Link ?? "/" + Path.GetFileName (rooty.TargetFileName);
-				item.Sidebar = rooty.Sidebar;
-				item.SidebarTitle = rooty.SidebarTitle;
-				menu.Items.Add (item);
+				var item = new MenuItem
+				{
+				    Name = string.IsNullOrWhiteSpace(rooty.MenuTitle) ? rooty.Title : rooty.MenuTitle,
+				    Link = rooty.Link ?? "/" + Path.GetFileName(rooty.TargetFileName),
+				    Sidebar = rooty.Sidebar,
+				    SidebarTitle = rooty.SidebarTitle
+				};
+			    menu.Items.Add (item);
 			}
 
 			foreach (var menuItem in menu.Items) {
@@ -37,17 +35,19 @@ namespace DevTyr.Gullap.Menu
 			var children = GetElementsWithParent(menuItem.Name, infos);
 			
 			foreach(var child in children) {
-				MenuItem item = new MenuItem();
-				item.Name = string.IsNullOrWhiteSpace(child.MenuTitle) ? child.Title : child.MenuTitle;
-				item.Link = child.Link ?? "/" + child.TargetFileName.Replace("\\", "/");
-				item.Sidebar = child.Sidebar;
-				item.SidebarTitle = child.SidebarTitle;
-				
-				if (!string.IsNullOrWhiteSpace(child.MenuCategory)) {
-					MenuCategory category = menuItem.GetCategory(child.MenuCategory);
+				var item = new MenuItem
+				{
+				    Name = string.IsNullOrWhiteSpace(child.MenuTitle) ? child.Title : child.MenuTitle,
+				    Link = child.Link ?? "/" + child.TargetFileName.Replace("\\", "/"),
+				    Sidebar = child.Sidebar,
+				    SidebarTitle = child.SidebarTitle
+				};
+
+			    if (!string.IsNullOrWhiteSpace(child.MenuCategory)) {
+					var category = menuItem.GetCategory(child.MenuCategory);
 					if (category == null)
 					{
-						category = new MenuCategory() { Name = child.MenuCategory };
+						category = new MenuCategory { Name = child.MenuCategory };
 						category.SubItems.Add(item);
 						menuItem.Categories.Add(category);
 					} else {
@@ -61,30 +61,15 @@ namespace DevTyr.Gullap.Menu
 			}
 		}
 
-		private List<ParsedFileInfo> GetRootElements (List<ParsedFileInfo> infos)
+		private IEnumerable<ParsedFileInfo> GetRootElements (IEnumerable<ParsedFileInfo> infos)
 		{
-			List<ParsedFileInfo> rootElements = new List<ParsedFileInfo> ();
-
-			foreach (var info in infos) {
-				if (string.IsNullOrWhiteSpace(info.Menu)) {
-					rootElements.Add(info);
-				}
-			}
-			return rootElements;
+		    return infos.Where(info => string.IsNullOrWhiteSpace(info.Menu)).ToList();
 		}
 
-		private List<ParsedFileInfo> GetElementsWithParent (string parentMenu, List<ParsedFileInfo> infos)
-		{
-			List<ParsedFileInfo> children = new List<ParsedFileInfo> ();
-
-			foreach (var info in infos) {
-				if (!string.IsNullOrWhiteSpace(info.Menu) && info.Menu.ToUpperInvariant().Equals(parentMenu.ToUpperInvariant())) 
-				{
-					children.Add(info);
-				}
-			}
-			return children;
-		}
+	    private IEnumerable<ParsedFileInfo> GetElementsWithParent (string parentMenu, IEnumerable<ParsedFileInfo> infos)
+	    {
+	        return infos.Where(info => !string.IsNullOrWhiteSpace(info.Menu) && info.Menu.ToUpperInvariant().Equals(parentMenu.ToUpperInvariant())).ToList();
+	    }
 	}
 }
 

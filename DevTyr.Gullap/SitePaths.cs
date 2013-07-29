@@ -1,11 +1,10 @@
-using System;
 using System.IO;
 
 namespace DevTyr.Gullap
 {
 	internal class SitePaths
 	{
-		private string sitePath;
+		private readonly string sitePath;
 
 		public SitePaths (string sitePath)
 		{

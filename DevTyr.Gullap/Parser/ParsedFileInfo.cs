@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace DevTyr.Gullap.Parser
@@ -37,32 +36,17 @@ namespace DevTyr.Gullap.Parser
 				if (string.IsNullOrWhiteSpace(FileName) || !ShouldBeGenerated)
 					return null;
 				
-				string sourceExtension = Path.GetExtension (FileName);
-				if (sourceExtension.ToLowerInvariant () != ".html") {
-					return GetTargetFileName(Path.GetFileName(FileName).Replace (sourceExtension, ".html"));
-				} else {
-					return GetTargetFileName(FileName);
-				}
+				var sourceExtension = Path.GetExtension (FileName);
+			    return GetTargetFileName(sourceExtension.ToLowerInvariant () != ".html" ? Path.GetFileName(FileName).Replace (sourceExtension, ".html") : FileName);
 			}
 		}
 
-		private string GetTargetFileName(string fileName) 
+		private string GetTargetFileName(string fileName)
 		{
-			if (!string.IsNullOrWhiteSpace (this.Directory))
-				return Path.Combine (this.Directory, fileName);
-			return fileName;
+		    return !string.IsNullOrWhiteSpace (Directory) ? Path.Combine (Directory, fileName) : fileName;
 		}
 
-		private string GetTargetPath(string fileName) 
-		{
-			if (!string.IsNullOrWhiteSpace(this.Directory)) 
-			{
-				return Path.Combine (this.Directory, fileName);
-			}
-			return fileName;
-		}
-
-		public bool ShouldBeGenerated {
+	    public bool ShouldBeGenerated {
 			get { return string.IsNullOrWhiteSpace (Link) && !string.IsNullOrWhiteSpace(ParsedContent); }
 		}
 	}
