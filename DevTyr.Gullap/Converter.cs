@@ -79,14 +79,14 @@ namespace DevTyr.Gullap
 		    var workspaceInfo = new WorkspaceInfo(Paths.PagesPath);
 		    var mapping = workspaceInfo.GetPathContentMapping();
 
-			var sourceFiles = Directory.GetFiles (Paths.PagesPath, "*.*", SearchOption.AllDirectories);
-			
-			var fileInfos = sourceFiles.Select(sourceFile =>
-			{
-			    var fileInfo = internalParser.Parse(sourceFile);
-			    fileInfo.FileName = sourceFile;
-			    return fileInfo;
-			}).ToList();
+		    var fileInfos = new List<ParsedFileInfo>();
+
+		    foreach (var key in mapping.Keys)
+		    {
+		        var fileInfo = internalParser.Parse(mapping[key]);
+		        fileInfo.FileName = key;
+                fileInfos.Add(fileInfo);
+		    }
 
 		    var menuBuilder = new MenuBuilder ();
 			var mainMenu = menuBuilder.Build (fileInfos);
