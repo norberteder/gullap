@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using DevTyr.Gullap.IO;
 using DevTyr.Gullap.Menu;
 using DevTyr.Gullap.Parser;
 using DevTyr.Gullap.Parser.Markdown;
@@ -75,9 +76,17 @@ namespace DevTyr.Gullap
 
 		private ConverterResult ConvertAllInternal ()
 		{
+		    var workspaceInfo = new WorkspaceInfo(Paths.PagesPath);
+		    var mapping = workspaceInfo.GetPathContentMapping();
+
 			var sourceFiles = Directory.GetFiles (Paths.PagesPath, "*.*", SearchOption.AllDirectories);
 			
-			var fileInfos = sourceFiles.Select(sourceFile => internalParser.ParseFile(sourceFile)).ToList();
+			var fileInfos = sourceFiles.Select(sourceFile =>
+			{
+			    var fileInfo = internalParser.Parse(sourceFile);
+			    fileInfo.FileName = sourceFile;
+			    return fileInfo;
+			}).ToList();
 
 		    var menuBuilder = new MenuBuilder ();
 			var mainMenu = menuBuilder.Build (fileInfos);

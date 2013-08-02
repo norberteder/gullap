@@ -1,28 +1,35 @@
-using System.IO;
+using System;
+using System.Collections.Generic;
 using MarkdownSharp;
 
 namespace DevTyr.Gullap.Parser.Markdown
 {
-	internal class MarkdownParser : IParser
+	public class MarkdownParser : IParser
 	{
-		public ParsedFileInfo ParseFile (string filePath)
+	    public IEnumerable<string> SupportedFileExtensions
+	    {
+	        get
+	        {
+	            yield return "md";
+	            yield return "markdown";
+	        } 
+	    }
+
+		public ParsedFileInfo Parse (string content)
 		{
-			if (!File.Exists (filePath))
-				throw new FileNotFoundException ("File {0} could not be found.", filePath);
+            Guard.NotNullOrEmpty(content, "content");
 
-			var info = new ParsedFileInfo {FileName = filePath};
+			var info = new ParsedFileInfo();
 
-		    var lines = File.ReadAllLines (filePath);
+		    var lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 			var endReached = false;
-
-			var content = string.Empty;
 
 			foreach (var line in lines) {
 				if (!endReached) {
 					ParseMarkdownHeaderLineNew(line, info);
 					endReached = IsEndOfMarkdownHeader(line);
 				} else if (string.IsNullOrWhiteSpace (info.Link)) {
-					content += line + System.Environment.NewLine;
+					content += line + Environment.NewLine;
 				}
 			}
 

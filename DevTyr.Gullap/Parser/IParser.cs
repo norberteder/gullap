@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+
 namespace DevTyr.Gullap.Parser
 {
 	public interface IParser
 	{
-		ParsedFileInfo ParseFile(string filePath);
+		IEnumerable<string> SupportedFileExtensions { get; }
+		ParsedFileInfo Parse(string content);
 	}
 }
 

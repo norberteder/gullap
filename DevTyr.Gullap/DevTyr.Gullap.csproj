@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,6 +42,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="ConverterOptions.cs" />
+    <Compile Include="IO\WorkspaceInfo.cs" />
     <Compile Include="Menu\MenuBuilder.cs" />
     <Compile Include="Menu\MainMenu.cs" />
     <Compile Include="Menu\MenuItem.cs" />
@@ -59,11 +60,5 @@
     <Compile Include="SitePaths.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Menu\" />
-    <Folder Include="Parser\" />
-    <Folder Include="Templating\" />
-    <Folder Include="Templating\Nustache\" />
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
