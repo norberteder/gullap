@@ -94,7 +94,7 @@ namespace DevTyr.Gullap
 			var successMessages = new List<string>();
 			
 			foreach (var info in fileInfos) {
-				ExportMarkdown (info, mainMenu);
+				Export (info, mainMenu);
 				if (string.IsNullOrWhiteSpace(info.TargetFileName)) {
 					successMessages.Add("Handled (not exported) " + Path.GetFileName(info.FileName));
 				} else {
@@ -112,7 +112,7 @@ namespace DevTyr.Gullap
 			}
 		}
 
-		private void ExportMarkdown (ParsedFileInfo info, MainMenu mainMenu)
+		private void Export (ParsedFileInfo info, MainMenu mainMenu)
 		{
 		    if (!info.ShouldBeGenerated) return;
 
