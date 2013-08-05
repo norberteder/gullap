@@ -18,7 +18,10 @@ namespace DevTyr.Gullap.Tests.With_Guard.For_NotNullOrEmpty
 		public void Should_include_argument_name_in_exception_message ()
 		{
 			string what = null;
-			Assert.Throws<ArgumentNullException> (() => Guard.NotNullOrEmpty (what, "what"), "what");
+			Assert.IsTrue (
+				Assert.Throws<ArgumentNullException> (() => Guard.NotNullOrEmpty (what, "what"))
+					.Message.Contains ("what")
+			);
 		}
     }
 }

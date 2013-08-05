@@ -25,7 +25,10 @@ namespace DevTyr.Gullap.Tests.With_Converter.For_SetParser
 				SitePath = "any"
 			});
 
-			Assert.Throws<ArgumentNullException> (() => converter.SetParser (null), "No valid parser given");
+			Assert.IsTrue (
+				Assert.Throws<ArgumentNullException> (() => converter.SetParser (null))
+					.Message.Contains ("No valid parser given")
+			);
 		}
     }
 }

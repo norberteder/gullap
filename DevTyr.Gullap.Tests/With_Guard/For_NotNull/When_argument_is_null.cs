@@ -18,7 +18,10 @@ namespace DevTyr.Gullap.Tests.With_Guard.For_NotNull
 		public void Should_include_argument_name_in_exception_message ()
 		{
 			object what = null;
-			Assert.Throws<ArgumentNullException> (() => Guard.NotNull (what, "what"), "what");
+			Assert.IsTrue (
+				Assert.Throws<ArgumentNullException> (() => Guard.NotNull (what, "what"))
+					.Message.Contains ("what")
+			);
 		}
 
 		[Test]
@@ -27,7 +30,7 @@ namespace DevTyr.Gullap.Tests.With_Guard.For_NotNull
 			object what = null;
 			Assert.IsTrue (
 				Assert.Throws<ArgumentNullException> (() => Guard.NotNull (what, "what", "the real deal"))
-					.Message.Contains("the real deal")
+					.Message.Contains ("the real deal")
 			);
 		}
     }
