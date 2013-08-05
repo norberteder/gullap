@@ -42,6 +42,7 @@
     <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_string_with_whitespaces_only.cs" />
     <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_not_null.cs" />
     <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_null.cs" />
+    <Compile Include="With_Converter\For_SetParser\When_argument_is_null.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -54,5 +55,7 @@
     <Folder Include="With_Guard\" />
     <Folder Include="With_Guard\For_NotNull\" />
     <Folder Include="With_Guard\For_NotNullOrEmpty\" />
+    <Folder Include="With_Converter\" />
+    <Folder Include="With_Converter\For_SetParser\" />
   </ItemGroup>
 </Project>
