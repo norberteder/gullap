@@ -30,8 +30,7 @@ namespace DevTyr.Gullap
 
 		public void SetParser (IParser parser)
 		{
-			if (parser == null)
-				throw new ArgumentException("No valid parser given");
+			Guard.NotNull (parser, "parser", "No valid parser given");
 
 			internalParser = parser;
 		}
