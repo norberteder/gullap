@@ -9,13 +9,13 @@ namespace DevTyr.Gullap.Tests.With_Converter.For_SetParser
 	public class When_argument_is_null
 	{
 		[Test]
-		public void Should_throw_argument_exception ()
+		public void Should_throw_argument_null_exception ()
 		{
 			var converter = new Converter (new ConverterOptions {
 				SitePath = "any"
 			});
 
-			Assert.Throws<ArgumentException> (() => converter.SetParser (null));
+			Assert.Throws<ArgumentNullException> (() => converter.SetParser (null));
 		}
 
 		[Test]
@@ -25,7 +25,7 @@ namespace DevTyr.Gullap.Tests.With_Converter.For_SetParser
 				SitePath = "any"
 			});
 
-			Assert.Throws<ArgumentException> (() => converter.SetParser (null), "No valid parser given");
+			Assert.Throws<ArgumentNullException> (() => converter.SetParser (null), "No valid parser given");
 		}
     }
 }
