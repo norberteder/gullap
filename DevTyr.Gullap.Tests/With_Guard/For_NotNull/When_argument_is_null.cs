@@ -20,5 +20,15 @@ namespace DevTyr.Gullap.Tests.With_Guard.For_NotNull
 			object what = null;
 			Assert.Throws<ArgumentNullException> (() => Guard.NotNull (what, "what"), "what");
 		}
+
+		[Test]
+		public void Should_include_message_if_provided ()
+		{
+			object what = null;
+			Assert.IsTrue (
+				Assert.Throws<ArgumentNullException> (() => Guard.NotNull (what, "what", "the real deal"))
+					.Message.Contains("the real deal")
+			);
+		}
     }
 }
