@@ -28,22 +28,6 @@ namespace DevTyr.Gullap
 			Paths = new SitePaths(options.SitePath);
 		}
 
-		public void SetParser (IParser parser)
-		{
-			if (parser == null)
-				throw new ArgumentException("No valid parser given");
-
-			internalParser = parser;
-		}
-
-		public void SetTemplater (ITemplater templater)
-		{
-			if (templater == null)
-				throw new ArgumentException("No valid templater given");
-
-			internalTemplater = templater;
-		}
-
 		public void InitializeSite ()
 		{
 			var generator = new SiteGenerator();
