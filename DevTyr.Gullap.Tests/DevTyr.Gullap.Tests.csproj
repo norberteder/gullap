@@ -9,6 +9,11 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DevTyr.Gullap.Tests</RootNamespace>
     <AssemblyName>DevTyr.Gullap.Tests</AssemblyName>
+    <ProjectGuid>{881FC0A6-3492-491B-AD7B-E2B1910B8DC3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DevTyr.Gullap.Tests</RootNamespace>
+    <AssemblyName>DevTyr.Gullap.Tests</AssemblyName>
+    <ReleaseVersion>1.0.1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,4 +57,25 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\Dependencies\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="With_Guard\For_NotNull\When_argument_is_null.cs" />
+    <Compile Include="With_Guard\For_NotNull\When_argument_is_not_null.cs" />
+    <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_empty_string.cs" />
+    <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_string_with_whitespaces_only.cs" />
+    <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_not_null.cs" />
+    <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_null.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\DevTyr.Gullap\DevTyr.Gullap.csproj">
+      <Project>{6848B621-476C-4509-8BBF-3B887E765A57}</Project>
+      <Name>DevTyr.Gullap</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
 </Project>
