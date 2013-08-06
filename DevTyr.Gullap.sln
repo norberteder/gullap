@@ -11,7 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Solution Items\TODO.md = Solution Items\TODO.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTyr.Gullap.Tests", "DevTyr.Gullap.Tests\DevTyr.Gullap.Tests.csproj", "{4D5B595D-B1A1-45CA-BA8C-720F9B53A4F9}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTyr.Gullap.Tests", "DevTyr.Gullap.Tests\DevTyr.Gullap.Tests.csproj", "{881FC0A6-3492-491B-AD7B-E2B1910B8DC3}"
 EndProject
 Global

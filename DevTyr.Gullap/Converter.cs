@@ -29,6 +29,22 @@ namespace DevTyr.Gullap
 			Paths = new SitePaths(options.SitePath);
 		}
 
+		public void SetParser (IParser parser)
+		{
+			if (parser == null)
+				throw new ArgumentNullException("No valid parser given");
+
+			internalParser = parser;
+		}
+
+		public void SetTemplater (ITemplater templater)
+		{
+			if (templater == null)
+				throw new ArgumentNullException("No valid templater given");
+
+			internalTemplater = templater;
+		}
+
 		public void InitializeSite ()
 		{
 			var generator = new SiteGenerator();
@@ -101,8 +117,10 @@ namespace DevTyr.Gullap
 		    if (!info.ShouldBeGenerated) return;
 
 		    var directoryName = Path.GetDirectoryName (info.TargetFileName);
+
 		    Console.WriteLine (info.TargetFileName);
-		    if (string.IsNullOrEmpty (directoryName))
+		    
+            if (string.IsNullOrEmpty (directoryName))
 		        directoryName = Environment.CurrentDirectory;
 		    EnsureTargetPath (directoryName);
 

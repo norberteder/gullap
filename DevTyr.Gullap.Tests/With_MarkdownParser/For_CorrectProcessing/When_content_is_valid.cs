@@ -1,32 +1,15 @@
 ﻿using System;
 using DevTyr.Gullap.Parser.Markdown;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 
-namespace DevTyr.Gullap.Tests.Parser
+namespace DevTyr.Gullap.Tests.With_MarkdownParser.For_CorrectProcessing
 {
     [TestFixture]
-    public class MarkdownParserTests
+    public class When_content_is_valid
     {
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Parse_Empty_Content()
-        {
-            var content = string.Empty;
-            var parser = new MarkdownParser();
-            parser.Parse(content);            
-        }
-
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void Parse_Null_Content()
-        {
-            var parser = new MarkdownParser();
-            parser.Parse(null);            
-        }
-
-        [Test]
-        public void Get_FileParseInfo_From_Valid_Content()
+        public void Should_return_correct_parsedfileinfo()
         {
             const string expectedTitle = "The Home of DevTyr";
             const string expectedDescription = "The Home of DevTyr";
