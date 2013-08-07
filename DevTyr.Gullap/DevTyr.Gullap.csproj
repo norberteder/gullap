@@ -58,6 +58,9 @@
     <Compile Include="Extensions\DirectoryExtensions.cs" />
     <Compile Include="SiteGenerator.cs" />
     <Compile Include="SitePaths.cs" />
+    <Compile Include="Yaml\ISupportsCustomYamlProperty.cs" />
+    <Compile Include="Yaml\YamlFrontMatterParserException.cs" />
+    <Compile Include="Yaml\YamlFrontMatterSimpleParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

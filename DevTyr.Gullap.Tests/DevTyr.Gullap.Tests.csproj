@@ -48,6 +48,8 @@
     <Compile Include="With_MarkdownParser\For_CorrectProcessing\When_content_is_valid.cs" />
     <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_empty.cs" />
     <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_null.cs" />
+    <Compile Include="With_YamlFrontMatterSimpleParser\For_ParsingData\When_content_is_invalid.cs" />
+    <Compile Include="With_YamlFrontMatterSimpleParser\For_ParsingData\When_content_is_valid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
