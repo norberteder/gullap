@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace DevTyr.Gullap.Tests.With_YamlFrontMatterSimpleParser.For_ParsingData
 {
+
     [TestFixture]
     public class When_content_is_invalid
     {
@@ -27,7 +28,7 @@ namespace DevTyr.Gullap.Tests.With_YamlFrontMatterSimpleParser.For_ParsingData
                              "title: Test" + Environment.NewLine +
                              "---";
             var parser = new YamlFrontMatterSimpleParser();
-            Assert.Throws<YamlFrontMatterParserException>(() => parser.ParseFrontMatterInto<TestPage>(sampleData));
+            Assert.Throws<YamlFrontMatterParserException>(() => parser.ParseFrontMatterInto<object>(sampleData));
         }
     }
 }

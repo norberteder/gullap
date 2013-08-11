@@ -40,6 +40,7 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="With_Converter\For_Null\When_options_are_incorrect.cs" />
@@ -49,7 +50,11 @@
     <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_empty.cs" />
     <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_null.cs" />
     <Compile Include="With_YamlFrontMatterSimpleParser\For_ParsingData\When_content_is_invalid.cs" />
-    <Compile Include="With_YamlFrontMatterSimpleParser\For_ParsingData\When_content_is_valid.cs" />
+    <Compile Include="With_YamlFrontMatterSimpleParser\For_ParsingData\When_text_starts_with_two_triple_dashed_lines.cs" />
+    <Compile Include="With_YamlFrontMatterSimpleParser\For_ParsingData\When_front_matter_is_parsed.cs" />
+    <Compile Include="With_YamlFrontMatterSimpleParser\For_ParsingData\When_front_matter_is_parsed_into_abstract_data_type.cs" />
+    <Compile Include="With_YamlFrontMatterSimpleParser\Acceptance_Criteria\Case_of_simple_front_matter.cs" />
+    <Compile Include="With_YamlFrontMatterSimpleParser\Acceptance_Criteria\Case_of_complex_front_matter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -81,4 +86,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="With_YamlFrontMatterSimpleParser\Acceptance_Criteria\" />
+  </ItemGroup>
 </Project>
