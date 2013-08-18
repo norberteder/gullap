@@ -30,12 +30,22 @@
     <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="MarkdownSharp">
       <HintPath>..\Dependencies\MarkdownSharp.dll</HintPath>
     </Reference>
     <Reference Include="Nustache.Core">
       <HintPath>..\Dependencies\Nustache.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet.Core">
+      <HintPath>..\Dependencies\YamlDotNet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet.Dynamic">
+      <HintPath>..\Dependencies\YamlDotNet.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet.RepresentationModel">
+      <HintPath>..\Dependencies\YamlDotNet.RepresentationModel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +58,7 @@
     <Compile Include="Menu\MenuItem.cs" />
     <Compile Include="Menu\MenuCategory.cs" />
     <Compile Include="ConverterResult.cs" />
+    <Compile Include="Model\Page.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\ParsedFileInfo.cs" />
     <Compile Include="Parser\ParserKeys.cs" />
@@ -58,9 +69,8 @@
     <Compile Include="Extensions\DirectoryExtensions.cs" />
     <Compile Include="SiteGenerator.cs" />
     <Compile Include="SitePaths.cs" />
-    <Compile Include="Yaml\ISupportsCustomYamlProperty.cs" />
-    <Compile Include="Yaml\YamlFrontMatterParserException.cs" />
-    <Compile Include="Yaml\YamlFrontMatterSimpleParser.cs" />
+    <Compile Include="Yaml\InvalidPageException.cs" />
+    <Compile Include="Yaml\PageParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

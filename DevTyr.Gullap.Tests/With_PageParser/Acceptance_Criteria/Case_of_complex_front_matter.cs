@@ -1,19 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 using DevTyr.Gullap.Yaml;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace DevTyr.Gullap.Tests.With_YamlFrontMatterSimpleParser.Acceptance_Criteria
+namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
 {
 	[TestFixture]
 	public class Case_of_complex_front_matter
 	{
-		readonly YamlFrontMatterSimpleParser parser = new YamlFrontMatterSimpleParser ();
+		readonly PageParser parser = new PageParser ();
 		readonly SampleYamlFrontMatter sample = new SampleYamlFrontMatter {
 			Text = @"---
 title: 'NOW: Colons!'
@@ -31,7 +28,7 @@ dictionary:
 ---
 Yes!
 ",
-			Title = "NOW: Colons",
+			Title = "NOW: Colons!",
 			Content = "Yes!",
 			Date = new DateTime (2011, 5, 23, 16, 0, 30),
 			Tags = new List<string> {
@@ -58,9 +55,20 @@ Yes!
 		[Test]
 		public void Can_parse_content()
 		{
-			var content = parser.GetContentExceptFrontMatter(sample.Text);
+		    var page = parser.Parse(sample.Text);
 
-			content
+		    page.Title
+		        .Should()
+		        .BeEquivalentTo(sample.Title);
+
+            page.Date
+                .Should()
+                .Be(sample.Date);
+
+            page.Tags
+                .ShouldAllBeEquivalentTo(sample.Tags);
+			
+            page.Content
 				.Should ()
 				.BeEquivalentTo (sample.Content);
 		}

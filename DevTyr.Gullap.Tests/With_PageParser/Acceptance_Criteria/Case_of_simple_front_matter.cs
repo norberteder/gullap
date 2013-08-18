@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 using DevTyr.Gullap.Yaml;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace DevTyr.Gullap.Tests.With_YamlFrontMatterSimpleParser.For_ParsingData
+namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
 {
-
     [TestFixture]
-    public class When_front_matter_is_parsed
+	public class Case_of_simple_front_matter
     {
-        readonly YamlFrontMatterSimpleParser parser = new YamlFrontMatterSimpleParser ();
+        readonly PageParser parser = new PageParser ();
 		readonly SampleYamlFrontMatter sample = new SampleYamlFrontMatter {
 			Text = 
 				"---" + Environment.NewLine +
@@ -26,22 +21,24 @@ namespace DevTyr.Gullap.Tests.With_YamlFrontMatterSimpleParser.For_ParsingData
 		};
 
         [Test]
-        public void Should_recognize_as_valid_front_matter ()
+        public void Can_parse_content()
         {
-			parser.HasValidFrontMatter (sample.Text)
-            	.Should ()
-				.BeTrue ();
-        }
+            var page = parser.Parse(sample.Text);
 
-        [Test]
-        public void Should_be_possible_to_retrieve_the_content()
-        {
-            var content = parser.GetContentExceptFrontMatter(sample.Text);
-
-            content
+            page.Content
 				.Should ()
 				.BeEquivalentTo (sample.Content);
         }
+
+		[Test]
+		public void Can_parse_title()
+		{
+		    var page = parser.Parse(sample.Text);
+
+			page.Title
+				.Should ()
+				.BeEquivalentTo (sample.Title);
+		}
 
 		private class SampleYamlFrontMatter 
 		{
