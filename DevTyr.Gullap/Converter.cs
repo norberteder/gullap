@@ -116,26 +116,34 @@ namespace DevTyr.Gullap
 
 		private void EnsureTargetPath (string targetPath)
 		{
-			if (!Directory.Exists (targetPath)) 
+		    var directory = Path.GetDirectoryName(targetPath);
+
+			if (!Directory.Exists(directory)) 
 			{
-				Directory.CreateDirectory(Path.Combine(Paths.OutputPath, targetPath));
+				Directory.CreateDirectory(directory);
 			}
 		}
 
 		private void Export (MetaPage page, dynamic metadata)
 		{
-		    var targetFileName = page.FileName.Replace(Paths.PagesPath, Paths.OutputPath);
+		    var targetDirectory = Path.GetDirectoryName(page.FileName.Replace(Paths.PagesPath, Paths.OutputPath));
+		    var targetFileName = Path.GetFileNameWithoutExtension(page.FileName) + ".html";
 
-		    Console.WriteLine (targetFileName);
-		    
-            if (string.IsNullOrEmpty (targetFileName))
-		        targetFileName = Environment.CurrentDirectory;
+		    var targetPath = Path.Combine(targetDirectory, targetFileName);
 
-		    EnsureTargetPath (targetFileName);
+		    Console.WriteLine (targetPath);
+
+		    if (string.IsNullOrWhiteSpace(page.Page.Template))
+		    {
+		        Console.WriteLine("No template given");
+		        return;
+		    }
+
+		    EnsureTargetPath (targetPath);
 		    
 		    var result = internalTemplater.Transform (Paths.TemplatePath, page.Page.Template, metadata);
 
-		    File.WriteAllText (targetFileName, result);
+		    File.WriteAllText (targetPath, result);
 		}
 
 	}
