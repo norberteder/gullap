@@ -53,11 +53,8 @@
     <Compile Include="Converter.cs" />
     <Compile Include="ConverterOptions.cs" />
     <Compile Include="IO\WorkspaceInfo.cs" />
-    <Compile Include="Menu\MenuBuilder.cs" />
-    <Compile Include="Menu\MainMenu.cs" />
-    <Compile Include="Menu\MenuItem.cs" />
-    <Compile Include="Menu\MenuCategory.cs" />
     <Compile Include="ConverterResult.cs" />
+    <Compile Include="Model\MetaPage.cs" />
     <Compile Include="Model\Page.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\ParsedFileInfo.cs" />

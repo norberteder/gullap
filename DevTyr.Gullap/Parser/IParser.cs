@@ -5,7 +5,7 @@ namespace DevTyr.Gullap.Parser
 	public interface IParser
 	{
 		IEnumerable<string> SupportedFileExtensions { get; }
-		ParsedFileInfo Parse(string content);
+		string Parse(string content);
 	}
 }
 

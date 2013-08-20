@@ -25,6 +25,11 @@ namespace DevTyr.Gullap.Model
             get { return yaml.description; }
         }
 
+        public string Category
+        {
+            get { return yaml.category; }
+        }
+
         public string Author
         {
             get { return yaml.author; }

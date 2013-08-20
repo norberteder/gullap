@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using DevTyr.Gullap.Model;
+using DevTyr.Gullap.Yaml;
 
 namespace DevTyr.Gullap.IO
 {
@@ -12,22 +15,32 @@ namespace DevTyr.Gullap.IO
             WorkspacePath = directory;
         }
 
-        public Dictionary<string, string> GetPathContentMapping()
+        public IEnumerable<MetaPage> GetPages()
         {
             if (!Directory.Exists(WorkspacePath))
                 throw new DirectoryNotFoundException();
 
             var sourceFiles = Directory.GetFiles(WorkspacePath, "*.*", SearchOption.AllDirectories);
-
-            var mapping = new Dictionary<string, string>();
+            var pageParser = new PageParser();
 
             foreach (var file in sourceFiles)
             {
                 var content = File.ReadAllText(file);
-                mapping.Add(file, content);
-            }
+                MetaPage metaPage = null;
+                try
+                {
+                    var page = pageParser.Parse(content);
 
-            return mapping;
+                    metaPage = new MetaPage(file) {Page = page};
+                } 
+                catch (InvalidPageException ipe)
+                {
+                    Debug.WriteLine("Invalid YAML Front Matter for file " + file);
+                }
+
+                if (metaPage != null)
+                    yield return metaPage;
+            }
         }
     }
 }

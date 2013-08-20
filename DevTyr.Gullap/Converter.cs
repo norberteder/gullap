@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using DevTyr.Gullap.IO;
-using DevTyr.Gullap.Menu;
+using DevTyr.Gullap.Model;
 using DevTyr.Gullap.Parser;
 using DevTyr.Gullap.Parser.Markdown;
 using DevTyr.Gullap.Templating;
@@ -32,7 +32,7 @@ namespace DevTyr.Gullap
 		public void SetParser (IParser parser)
 		{
 			if (parser == null)
-				throw new ArgumentNullException("No valid parser given");
+				throw new ArgumentNullException("parser");
 
 			internalParser = parser;
 		}
@@ -40,7 +40,7 @@ namespace DevTyr.Gullap
 		public void SetTemplater (ITemplater templater)
 		{
 			if (templater == null)
-				throw new ArgumentNullException("No valid templater given");
+				throw new ArgumentNullException("templater");
 
 			internalTemplater = templater;
 		}
@@ -77,32 +77,42 @@ namespace DevTyr.Gullap
 		private ConverterResult ConvertAllInternal ()
 		{
 		    var workspaceInfo = new WorkspaceInfo(Paths.PagesPath);
-		    var mapping = workspaceInfo.GetPathContentMapping();
+		    var pages = workspaceInfo.GetPages().ToList();
 
-		    var fileInfos = new List<ParsedFileInfo>();
+		    ParseContents(pages);
+		    var metadata = ParseTemplateData(pages);
 
-		    foreach (var key in mapping.Keys)
-		    {
-		        var fileInfo = internalParser.Parse(mapping[key]);
-		        fileInfo.FileName = key;
-                fileInfos.Add(fileInfo);
-		    }
-
-		    var menuBuilder = new MenuBuilder ();
-			var mainMenu = menuBuilder.Build (fileInfos);
-			
 			var successMessages = new List<string>();
 			
-			foreach (var info in fileInfos) {
-				Export (info, mainMenu);
-				if (string.IsNullOrWhiteSpace(info.TargetFileName)) {
-					successMessages.Add("Handled (not exported) " + Path.GetFileName(info.FileName));
-				} else {
-					successMessages.Add("Exported " + info.TargetFileName);
-				}
+			foreach (var page in pages) 
+            {
+				Export (page, metadata);
+				successMessages.Add("Exported " + page.FileName);
 			}
 			return new ConverterResult(false, null, successMessages);
 		}
+
+        private object ParseTemplateData(IEnumerable<MetaPage> metaPages)
+        {
+            dynamic metadata = new
+            {
+                site = new
+                {
+                    time = DateTime.Now,
+                    pages = metaPages.Where(page => !page.Page.Draft).Select(page => page.Page)
+                }
+            };
+
+            return metadata;
+        }
+
+        private void ParseContents(IEnumerable<MetaPage> metaPages)
+        {
+            foreach (var page in metaPages)
+            {
+                internalParser.Parse(page.Page.Content);
+            }
+        }
 
 		private void EnsureTargetPath (string targetPath)
 		{
@@ -112,32 +122,22 @@ namespace DevTyr.Gullap
 			}
 		}
 
-		private void Export (ParsedFileInfo info, MainMenu mainMenu)
+		private void Export (MetaPage page, dynamic metadata)
 		{
-		    if (!info.ShouldBeGenerated) return;
+		    var targetFileName = page.FileName.Replace(Paths.PagesPath, Paths.OutputPath);
 
-		    var directoryName = Path.GetDirectoryName (info.TargetFileName);
-
-		    Console.WriteLine (info.TargetFileName);
+		    Console.WriteLine (targetFileName);
 		    
-            if (string.IsNullOrEmpty (directoryName))
-		        directoryName = Environment.CurrentDirectory;
-		    EnsureTargetPath (directoryName);
+            if (string.IsNullOrEmpty (targetFileName))
+		        targetFileName = Environment.CurrentDirectory;
 
-		    var sidebarItems = mainMenu.GetSidebarItems(info.Sidebar);
+		    EnsureTargetPath (targetFileName);
+		    
+		    var result = internalTemplater.Transform (Paths.TemplatePath, page.Page.Template, metadata);
 
-		    var templateData = new { content = info.ParsedContent, menu = mainMenu, title = info.Title, date = info.Date, description = info.Description, author = info.Author, sidebarheader = info.Sidebar, sidebaritems = sidebarItems, keywords = info.Keywords };
-
-		    var result = internalTemplater.Transform (Paths.TemplatePath, info.Template, templateData);
-
-		    var target = CalculateTargetFileName(info);
-		    File.WriteAllText (target, result);
+		    File.WriteAllText (targetFileName, result);
 		}
 
-		private string CalculateTargetFileName (ParsedFileInfo info)
-		{
-			return Path.Combine(Paths.OutputPath, info.TargetFileName);
-		}
 	}
 }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using DevTyr.Gullap.Parser.Markdown;
+﻿using DevTyr.Gullap.Parser.Markdown;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -9,24 +8,16 @@ namespace DevTyr.Gullap.Tests.With_MarkdownParser.For_CorrectProcessing
     public class When_content_is_valid
     {
         [Test]
-        public void Should_return_correct_parsedfileinfo()
+        public void Should_return_parsed_Content()
         {
-            const string expectedTitle = "The Home of DevTyr";
-            const string expectedDescription = "The Home of DevTyr";
-            const string expectedAuthor = "Norbert Eder";
-
-            var content = "Title: The Home of DevTyr" + Environment.NewLine
-                          + "Description: The Home of DevTyr" + Environment.NewLine
-                          + "Author: Norbert Eder" + Environment.NewLine
-                          + "-----";
+            const string content = "Test **Test**";
+            const string expected = "<p>Test <strong>Test</strong></p>\n";
 
             var parser = new MarkdownParser();
-            var info = parser.Parse(content);
+            var parsedContent = parser.Parse(content);
 
-            info.Should().NotBeNull();
-            info.Title.Should().Be(expectedTitle);
-            info.Description.Should().Be(expectedDescription);
-            info.Author.Should().Be(expectedAuthor);
+            parsedContent.Should().NotBeNull();
+            parsedContent.Should().BeEquivalentTo(expected);
         }
     }
 }
