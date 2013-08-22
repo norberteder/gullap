@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DevTyr.Gullap.Parser.Markdown;
+﻿using DevTyr.Gullap.Parser.Markdown;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace DevTyr.Gullap.Tests.With_MarkdownParser.For_NullOrEmpty
@@ -15,7 +12,9 @@ namespace DevTyr.Gullap.Tests.With_MarkdownParser.For_NullOrEmpty
         {
             var content = string.Empty;
             var parser = new MarkdownParser();
-            Assert.Throws<ArgumentException>(() => parser.Parse(content));  
+
+            var result = parser.Parse(content);
+            result.Should().BeEmpty();
         }
     }
 }

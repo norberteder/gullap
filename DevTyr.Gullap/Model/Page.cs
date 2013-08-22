@@ -7,12 +7,11 @@ namespace DevTyr.Gullap.Model
     public class Page
     {
         private readonly dynamic yaml;
-        private readonly string content;
 
         public Page(DynamicYaml dynamicYaml, string unparsedContent)
         {
             yaml = dynamicYaml;
-            content = unparsedContent;
+            Content = unparsedContent;
         }
 
         public string Title
@@ -55,10 +54,7 @@ namespace DevTyr.Gullap.Model
             get { return yaml.draft; }
         }
 
-        public string Content
-        {
-            get { return content; }
-        }
+        public string Content { get; set; }
 
         public DynamicYaml DynamicYaml
         {

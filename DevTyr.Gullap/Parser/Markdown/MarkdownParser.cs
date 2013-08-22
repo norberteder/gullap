@@ -16,7 +16,8 @@ namespace DevTyr.Gullap.Parser.Markdown
 
 		public string Parse (string content)
 		{
-            Guard.NotNullOrEmpty(content, "content");
+		    if (string.IsNullOrWhiteSpace(content))
+		        return string.Empty;
 
 		    var markdownOptions = new MarkdownOptions
 		    {

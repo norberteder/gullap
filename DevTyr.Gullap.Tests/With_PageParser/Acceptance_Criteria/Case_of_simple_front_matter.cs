@@ -9,7 +9,8 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
 	public class Case_of_simple_front_matter
     {
         readonly PageParser parser = new PageParser ();
-		readonly SampleYamlFrontMatter sample = new SampleYamlFrontMatter {
+		readonly SampleYamlFrontMatter sample = new SampleYamlFrontMatter 
+        {
 			Text = 
 				"---" + Environment.NewLine +
 				"title: Test" + Environment.NewLine +
@@ -19,6 +20,14 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
 			Title = "Test", 
 			Content = "This is the content"
 		};
+
+        readonly SampleYamlFrontMatter sampleOnlyTitle = new SampleYamlFrontMatter
+        {
+            Text = "---" + Environment.NewLine +
+                    "title: Test" + Environment.NewLine +
+                    "----",
+            Title = "Test"
+        };
 
         [Test]
         public void Can_parse_content()
@@ -39,6 +48,16 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
 				.Should ()
 				.BeEquivalentTo (sample.Title);
 		}
+
+        [Test]
+        public void Can_parse_having_only_title()
+        {
+            var page = parser.Parse(sampleOnlyTitle.Text);
+
+            page.Title
+                .Should()
+                .BeEquivalentTo(sampleOnlyTitle.Title);
+        }
 
 		private class SampleYamlFrontMatter 
 		{

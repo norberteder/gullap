@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using DevTyr.Gullap.Model;
@@ -29,6 +30,7 @@ namespace DevTyr.Gullap.IO
                 MetaPage metaPage = null;
                 try
                 {
+                    Console.WriteLine("Reading file {0}", file);
                     var page = pageParser.Parse(content);
 
                     metaPage = new MetaPage(file) {Page = page};

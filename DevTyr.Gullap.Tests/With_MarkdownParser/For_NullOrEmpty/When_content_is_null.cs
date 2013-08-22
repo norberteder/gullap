@@ -1,5 +1,5 @@
-﻿using System;
-using DevTyr.Gullap.Parser.Markdown;
+﻿using DevTyr.Gullap.Parser.Markdown;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace DevTyr.Gullap.Tests.With_MarkdownParser.For_NullOrEmpty
@@ -11,7 +11,9 @@ namespace DevTyr.Gullap.Tests.With_MarkdownParser.For_NullOrEmpty
         public void Should_throw_argumentnullexception()
         {
             var parser = new MarkdownParser();
-            Assert.Throws<ArgumentNullException>(() => parser.Parse(null)); 
+
+            var result = parser.Parse(null);
+            result.Should().BeEmpty();
         }
     }
 }

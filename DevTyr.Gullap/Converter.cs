@@ -79,7 +79,12 @@ namespace DevTyr.Gullap
 		    var workspaceInfo = new WorkspaceInfo(Paths.PagesPath);
 		    var pages = workspaceInfo.GetPages().ToList();
 
+            Console.WriteLine("Parsing contents for {0} files", pages.Count);
+
 		    ParseContents(pages);
+
+            Console.WriteLine("Generating template data");
+
 		    var metadata = ParseTemplateData(pages);
 
 			var successMessages = new List<string>();
@@ -110,7 +115,8 @@ namespace DevTyr.Gullap
         {
             foreach (var page in metaPages)
             {
-                internalParser.Parse(page.Page.Content);
+                Console.WriteLine("Parsing content for " + page.FileName);
+                page.Page.Content = internalParser.Parse(page.Page.Content);
             }
         }
 
@@ -131,11 +137,9 @@ namespace DevTyr.Gullap
 
 		    var targetPath = Path.Combine(targetDirectory, targetFileName);
 
-		    Console.WriteLine (targetPath);
-
 		    if (string.IsNullOrWhiteSpace(page.Page.Template))
 		    {
-		        Console.WriteLine("No template given");
+		        Console.WriteLine("No template given for file {0}", page.FileName);
 		        return;
 		    }
 
@@ -144,6 +148,8 @@ namespace DevTyr.Gullap
 		    var result = internalTemplater.Transform (Paths.TemplatePath, page.Page.Template, metadata);
 
 		    File.WriteAllText (targetPath, result);
+
+            Console.WriteLine("Exported " + targetPath);
 		}
 
 	}
