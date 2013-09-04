@@ -8,7 +8,7 @@ namespace DevTyr.Gullap.Tests.With_MarkdownParser.For_NullOrEmpty
     public class When_content_is_null
     {
         [Test]
-        public void Should_throw_argumentnullexception()
+        public void Should_not_throw_an_exception()
         {
             var parser = new MarkdownParser();
 
