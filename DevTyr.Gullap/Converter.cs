@@ -1,4 +1,5 @@
 using System;
+using System.Dynamic;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,28 +85,31 @@ namespace DevTyr.Gullap
 		    ParseContents(pages);
 
             Console.WriteLine("Generating template data");
-
-		    var metadata = ParseTemplateData(pages);
+            Console.WriteLine("Found {0} pages", pages.Count);
 
 			var successMessages = new List<string>();
 			
 			foreach (var page in pages) 
             {
+                dynamic metadata = ParseTemplateData(pages, page.Page);
+                Console.WriteLine("Build metadata: " + metadata);
+
 				Export (page, metadata);
 				successMessages.Add("Exported " + page.FileName);
 			}
 			return new ConverterResult(false, null, successMessages);
 		}
 
-        private object ParseTemplateData(IEnumerable<MetaPage> metaPages)
+        private dynamic ParseTemplateData(IEnumerable<MetaPage> metaPages, Page currentPage)
         {
             dynamic metadata = new
             {
                 site = new
                 {
                     time = DateTime.Now,
-                    pages = metaPages.Where(page => !page.Page.Draft).Select(page => page.Page)
-                }
+                    pages = metaPages.Where(page => !page.Page.Draft).Select(page => page.Page).ToArray()
+                },
+                current = currentPage
             };
 
             return metadata;
@@ -144,7 +148,7 @@ namespace DevTyr.Gullap
 		    }
 
 		    EnsureTargetPath (targetPath);
-		    
+
 		    var result = internalTemplater.Transform (Paths.TemplatePath, page.Page.Template, metadata);
 
 		    File.WriteAllText (targetPath, result);
