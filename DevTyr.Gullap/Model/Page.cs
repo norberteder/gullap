@@ -51,7 +51,13 @@ namespace DevTyr.Gullap.Model
 
         public bool Draft
         {
-            get { return yaml.draft; }
+            get
+            {
+                var draft = (string)yaml.draft;
+                if (string.IsNullOrWhiteSpace(draft))
+                    return false;
+                else return Boolean.Parse(draft);
+            }
         }
 
         public string Content { get; set; }
