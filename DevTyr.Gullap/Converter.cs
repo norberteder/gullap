@@ -92,7 +92,6 @@ namespace DevTyr.Gullap
 			foreach (var page in pages) 
             {
                 dynamic metadata = ParseTemplateData(pages, page.Page);
-                Console.WriteLine("Build metadata: " + metadata);
 
 				Export (page, metadata);
 				successMessages.Add("Exported " + page.FileName);
