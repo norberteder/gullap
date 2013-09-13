@@ -96,6 +96,10 @@ namespace DevTyr.Gullap.GullapConsole
                     Console.WriteLine("Site directory [" + arg + "] must be created manually");
                 }
             }
+
+            if (string.IsNullOrWhiteSpace(cmdOptions.SitePath))
+                cmdOptions.SitePath = Environment.CurrentDirectory;
+
             return cmdOptions;
         }
 
