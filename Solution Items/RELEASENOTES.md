@@ -6,6 +6,7 @@
 - Removed MenuBuilder (this can be done via templating now)
 - Available variables for templating changed, please see documentation
 - If there is no command argument given for the site path, the current path is used
+- Optional site configuration (Yaml)
 
 **1.0.1**
 
