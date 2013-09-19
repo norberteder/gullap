@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using DevTyr.Gullap.Model;
+using System.Reflection;
 
 namespace DevTyr.Gullap.GullapConsole
 {
@@ -109,14 +109,15 @@ namespace DevTyr.Gullap.GullapConsole
 
         private static void ShowHelp()
         {
-            Console.WriteLine("GullapConsole -i [SitePath]\t\tInitialize Site");
-            Console.WriteLine("GullapConsole -g [SitePath]\t\tGenerate Site");
+            Console.WriteLine("GullapConsole -i [SitePath]  Initialize Site");
+            Console.WriteLine("GullapConsole -g [SitePath]  Generate Site");
+            Console.WriteLine("GullapConsole -g             Generate Site [current location]");
         }
 
         private static void ShowInfo()
         {
-            Console.WriteLine("DevTyr Gullap");
-            Console.WriteLine("http://devtyr.com");
+            Console.WriteLine("DevTyr Gullap {0} | {1}", Assembly.GetExecutingAssembly().GetName().Version, "http://devtyr.com");
+            Console.WriteLine();
         }
     }
 }
