@@ -25,8 +25,18 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
         {
             Text = "---" + Environment.NewLine +
                     "title: Test" + Environment.NewLine +
-                    "----",
+                    "---" + Environment.NewLine,
             Title = "Test"
+        };
+
+        private readonly SampleYamlFrontMatter sampleOnlyTitleHavingHyphensInContent = new SampleYamlFrontMatter
+        {
+            Text = "---" + Environment.NewLine +
+                   "title: Test" + Environment.NewLine +
+                   "---" + Environment.NewLine +
+                   "This is having ----- inside",
+            Title = "Test",
+            Content = "This is having ----- inside"
         };
 
         [Test]
@@ -57,6 +67,20 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
             page.Title
                 .Should()
                 .BeEquivalentTo(sampleOnlyTitle.Title);
+        }
+
+        [Test]
+        public void Can_parse_having_hyphens_within_content()
+        {
+            var page = parser.Parse(sampleOnlyTitleHavingHyphensInContent.Text);
+
+            page.Title
+                .Should()
+                .BeEquivalentTo(sampleOnlyTitleHavingHyphensInContent.Title);
+
+            page.Content
+                .Should()
+                .BeEquivalentTo(sampleOnlyTitleHavingHyphensInContent.Content);
         }
 
 		private class SampleYamlFrontMatter 
