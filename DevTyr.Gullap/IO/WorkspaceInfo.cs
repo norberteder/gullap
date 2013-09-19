@@ -9,19 +9,19 @@ namespace DevTyr.Gullap.IO
 {
     public class WorkspaceInfo
     {
-        public string WorkspacePath { get; private set; }
+        public SitePaths Paths { get; private set; }
 
-        public WorkspaceInfo(string directory)
+        public WorkspaceInfo(SitePaths paths)
         {
-            WorkspacePath = directory;
+            Paths = paths;
         }
 
         public IEnumerable<MetaPage> GetPages()
         {
-            if (!Directory.Exists(WorkspacePath))
+            if (!Directory.Exists(Paths.PagesPath))
                 throw new DirectoryNotFoundException();
 
-            var sourceFiles = Directory.GetFiles(WorkspacePath, "*.*", SearchOption.AllDirectories);
+            var sourceFiles = Directory.GetFiles(Paths.PagesPath, "*.*", SearchOption.AllDirectories);
             var pageParser = new PageParser();
 
             foreach (var file in sourceFiles)
@@ -34,6 +34,8 @@ namespace DevTyr.Gullap.IO
                     var page = pageParser.Parse(content);
 
                     metaPage = new MetaPage(file) {Page = page};
+
+                    metaPage.Page.Url = metaPage.GetTargetFileName(Paths).Replace(Paths.OutputPath, "").Replace('\\', '/');
                 } 
                 catch (InvalidPageException ipe)
                 {

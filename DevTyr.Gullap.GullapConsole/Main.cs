@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using DevTyr.Gullap.Model;
 
 namespace DevTyr.Gullap.GullapConsole
 {
@@ -27,9 +28,12 @@ namespace DevTyr.Gullap.GullapConsole
                 Environment.Exit(1);
             }
 
+            
+
             var options = new ConverterOptions
             {
-                SitePath = cmdOptions.SitePath
+                SitePath = cmdOptions.SitePath,
+                SiteConfiguration = SiteConfigurationParser.LoadSiteConfiguration("config.yml")
             };
 
             var watch = new Stopwatch();

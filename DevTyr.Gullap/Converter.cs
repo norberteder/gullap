@@ -77,8 +77,10 @@ namespace DevTyr.Gullap
 
 		private ConverterResult ConvertAllInternal ()
 		{
-		    var workspaceInfo = new WorkspaceInfo(Paths.PagesPath);
+		    var workspaceInfo = new WorkspaceInfo(Paths);
 		    var pages = workspaceInfo.GetPages().ToList();
+
+		    FillCategoryPages(pages);
 
             Console.WriteLine("Parsing contents for {0} files", pages.Count);
 
@@ -99,14 +101,27 @@ namespace DevTyr.Gullap
 			return new ConverterResult(false, null, successMessages);
 		}
 
+        private void FillCategoryPages(List<MetaPage> pages)
+        {
+            foreach (var page in pages)
+            {
+                if (!string.IsNullOrWhiteSpace(page.Page.Category))
+                {
+                    page.Page.CategoryPages = pages.Where(item => item.Page.Category == page.Page.Category).Select(item => item.Page).ToList();
+                }
+            }
+        }
+
         private dynamic ParseTemplateData(IEnumerable<MetaPage> metaPages, Page currentPage)
         {
             dynamic metadata = new
             {
                 site = new
                 {
+                    config = Options.SiteConfiguration,
                     time = DateTime.Now,
-                    pages = metaPages.Where(page => !page.Page.Draft).Select(page => page.Page).ToArray()
+                    pages = metaPages.Where(page => !page.Page.Draft).Select(page => page.Page).ToArray(),
+                    categories = metaPages.Where(page => !string.IsNullOrWhiteSpace(page.Page.Category)).Select(t => new  { t.Page.Category, t.Page }).ToDictionary(arg => arg, arg => arg)
                 },
                 current = currentPage
             };
@@ -135,10 +150,7 @@ namespace DevTyr.Gullap
 
 		private void Export (MetaPage page, dynamic metadata)
 		{
-		    var targetDirectory = Path.GetDirectoryName(page.FileName.Replace(Paths.PagesPath, Paths.OutputPath));
-		    var targetFileName = Path.GetFileNameWithoutExtension(page.FileName) + ".html";
-
-		    var targetPath = Path.Combine(targetDirectory, targetFileName);
+		    var targetPath = page.GetTargetFileName(Paths);
 
 		    if (string.IsNullOrWhiteSpace(page.Page.Template))
 		    {
@@ -154,7 +166,6 @@ namespace DevTyr.Gullap
 
             Console.WriteLine("Exported " + targetPath);
 		}
-
 	}
 }
 

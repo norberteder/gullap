@@ -2,7 +2,7 @@ using System.IO;
 
 namespace DevTyr.Gullap
 {
-	internal class SitePaths
+	public class SitePaths
 	{
 		private readonly string sitePath;
 

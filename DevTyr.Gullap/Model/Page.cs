@@ -1,5 +1,9 @@
 ﻿using System;
+using System.CodeDom;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Dynamic;
+using Microsoft.CSharp;
 using YamlDotNet.Dynamic;
 
 namespace DevTyr.Gullap.Model
@@ -7,6 +11,7 @@ namespace DevTyr.Gullap.Model
     public class Page
     {
         private readonly dynamic yaml;
+        private List<Page> categoryPages = new List<Page>();
 
         public Page(DynamicYaml dynamicYaml, string unparsedContent)
         {
@@ -56,15 +61,26 @@ namespace DevTyr.Gullap.Model
                 var draft = (string)yaml.draft;
                 if (string.IsNullOrWhiteSpace(draft))
                     return false;
-                else return Boolean.Parse(draft);
+                return Boolean.Parse(draft);
             }
         }
 
         public string Content { get; set; }
 
-        public DynamicYaml DynamicYaml
+        public string Url { get; set; }
+
+        public List<Page> CategoryPages
         {
-            get { return yaml; }
+            get { return categoryPages; }
+            set { categoryPages = value; }
+        } 
+
+        public object Meta
+        {
+            get
+            {
+                return ((DynamicYaml)yaml);
+            }
         }
     }
 }
