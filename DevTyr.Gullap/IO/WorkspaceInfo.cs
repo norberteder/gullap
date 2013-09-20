@@ -30,7 +30,7 @@ namespace DevTyr.Gullap.IO
                 MetaPage metaPage = null;
                 try
                 {
-                    Console.WriteLine("Reading file {0}", file);
+                    Trace.TraceInformation("Reading file {0}", file);
                     var page = pageParser.Parse(content);
 
                     metaPage = new MetaPage(file) {Page = page};
@@ -39,7 +39,7 @@ namespace DevTyr.Gullap.IO
                 } 
                 catch (InvalidPageException ipe)
                 {
-                    Debug.WriteLine("Invalid YAML Front Matter for file " + file);
+                    Trace.TraceWarning("Invalid YAML Front Matter for file " + file);
                 }
 
                 if (metaPage != null)

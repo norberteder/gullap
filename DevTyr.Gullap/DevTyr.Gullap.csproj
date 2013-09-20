@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -53,7 +53,6 @@
     <Compile Include="Converter.cs" />
     <Compile Include="ConverterOptions.cs" />
     <Compile Include="IO\WorkspaceInfo.cs" />
-    <Compile Include="ConverterResult.cs" />
     <Compile Include="Model\MetaPage.cs" />
     <Compile Include="Model\MetaPageExtensions.cs" />
     <Compile Include="Model\Page.cs" />

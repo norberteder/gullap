@@ -19,6 +19,8 @@ namespace DevTyr.Gullap.GullapConsole
         {
             ShowInfo();
 
+            ConfigureTrace();
+
             var cmdOptions = GenerateOptionsFromArguments(args);
 
             if (string.IsNullOrWhiteSpace(cmdOptions.SitePath) ||
@@ -27,8 +29,6 @@ namespace DevTyr.Gullap.GullapConsole
                 ShowHelp();
                 Environment.Exit(1);
             }
-
-            
 
             var options = new ConverterOptions
             {
@@ -41,38 +41,21 @@ namespace DevTyr.Gullap.GullapConsole
 
             var converter = new Converter(options);
 
-            ConverterResult result = null;
-
             if (cmdOptions.InitializeSite)
             {
                 converter.InitializeSite();
-                Console.WriteLine("Site [" + cmdOptions.SitePath + "] generated");
+                Trace.TraceInformation("Site [{0}] generated", cmdOptions.SitePath);
             }
 
             if (cmdOptions.GenerateSite)
             {
-                result = converter.ConvertAll();
+                converter.ConvertAll();
             }
 
             watch.Stop();
 
-            if (result != null)
-            {
-                if (result.HasError)
-                {
-                    Console.WriteLine(result.ErrorMessage);
-                }
-                else
-                {
-                    if (result.SuccessMessages != null)
-                    {
-                        foreach (string msg in result.SuccessMessages)
-                            Console.WriteLine(msg);
-                    }
-                }
-            }
-            Console.WriteLine();
-            Console.WriteLine("Finished in {0}", watch.Elapsed);
+            Trace.WriteLine("");
+            Trace.TraceInformation("Finished in {0}", watch.Elapsed);
         }
 
         private static Options GenerateOptionsFromArguments(IEnumerable<string> args)
@@ -97,7 +80,7 @@ namespace DevTyr.Gullap.GullapConsole
                 }
                 else
                 {
-                    Console.WriteLine("Site directory [" + arg + "] must be created manually");
+                    Trace.TraceInformation("Site directory [{0}] must be created manually", arg);
                 }
             }
 
@@ -118,6 +101,13 @@ namespace DevTyr.Gullap.GullapConsole
         {
             Console.WriteLine("DevTyr Gullap {0} | {1}", Assembly.GetExecutingAssembly().GetName().Version, "http://devtyr.com");
             Console.WriteLine();
+        }
+
+        private static void ConfigureTrace()
+        {
+            var listener = new ConsoleTraceListener();
+            Trace.Listeners.Add(listener);
+            Trace.AutoFlush = true;
         }
     }
 }

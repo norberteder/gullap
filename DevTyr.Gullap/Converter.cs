@@ -1,5 +1,5 @@
 using System;
-using System.Dynamic;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,15 +52,11 @@ namespace DevTyr.Gullap
 			generator.Generate(new SitePaths(Options.SitePath));
 		}
 
-		public ConverterResult ConvertAll ()
+		public void ConvertAll ()
 		{
-			try {
-				CleanOutput();
-				CopyAssets();
-				return ConvertAllInternal();
-			} catch (Exception ex) {
-				return new ConverterResult(true, ex.Message, null);
-			}
+            CleanOutput();
+            CopyAssets();
+            ConvertAllInternal();
 		}
 
 		private void CleanOutput ()
@@ -75,30 +71,27 @@ namespace DevTyr.Gullap
 			DirectoryExtensions.DirectoryCopy(Paths.AssetsPath, Paths.OutputPath, true);
 		}
 
-		private ConverterResult ConvertAllInternal ()
+		private void ConvertAllInternal ()
 		{
 		    var workspaceInfo = new WorkspaceInfo(Paths);
 		    var pages = workspaceInfo.GetPages().ToList();
 
 		    FillCategoryPages(pages);
 
-            Console.WriteLine("Parsing contents for {0} files", pages.Count);
+            Trace.TraceInformation("Parsing contents for {0} files", pages.Count);
 
 		    ParseContents(pages);
 
-            Console.WriteLine("Generating template data");
-            Console.WriteLine("Found {0} pages", pages.Count);
+            Trace.TraceInformation("Generating template data");
+            Trace.TraceInformation("Found {0} pages", pages.Count);
 
-			var successMessages = new List<string>();
-			
 			foreach (var page in pages) 
             {
                 dynamic metadata = ParseTemplateData(pages, page.Page);
 
 				Export (page, metadata);
-				successMessages.Add("Exported " + page.FileName);
+                Trace.TraceInformation("Exported {0}", page.FileName);
 			}
-			return new ConverterResult(false, null, successMessages);
 		}
 
         private void FillCategoryPages(List<MetaPage> pages)
@@ -133,7 +126,7 @@ namespace DevTyr.Gullap
         {
             foreach (var page in metaPages)
             {
-                Console.WriteLine("Parsing content for " + page.FileName);
+                Trace.TraceInformation("Parsing content for " + page.FileName);
                 page.Page.Content = internalParser.Parse(page.Page.Content);
             }
         }
@@ -154,7 +147,7 @@ namespace DevTyr.Gullap
 
 		    if (string.IsNullOrWhiteSpace(page.Page.Template))
 		    {
-		        Console.WriteLine("No template given for file {0}", page.FileName);
+                Trace.TraceWarning("No template given for file {0}", page.FileName);
 		        return;
 		    }
 
