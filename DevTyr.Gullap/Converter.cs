@@ -163,8 +163,6 @@ namespace DevTyr.Gullap
 		    var result = internalTemplater.Transform (Paths.TemplatePath, page.Page.Template, metadata);
 
 		    File.WriteAllText (targetPath, result);
-
-            Console.WriteLine("Exported " + targetPath);
 		}
 	}
 }
