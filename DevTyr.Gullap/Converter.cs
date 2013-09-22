@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using DevTyr.Gullap.Menu;
+using DevTyr.Gullap.IO;
+using DevTyr.Gullap.Model;
 using DevTyr.Gullap.Parser;
 using DevTyr.Gullap.Parser.Markdown;
 using DevTyr.Gullap.Templating;
@@ -28,21 +30,33 @@ namespace DevTyr.Gullap
 			Paths = new SitePaths(options.SitePath);
 		}
 
+		public void SetParser (IParser parser)
+		{
+			if (parser == null)
+				throw new ArgumentNullException("parser");
+
+			internalParser = parser;
+		}
+
+		public void SetTemplater (ITemplater templater)
+		{
+			if (templater == null)
+				throw new ArgumentNullException("templater");
+
+			internalTemplater = templater;
+		}
+
 		public void InitializeSite ()
 		{
 			var generator = new SiteGenerator();
 			generator.Generate(new SitePaths(Options.SitePath));
 		}
 
-		public ConverterResult ConvertAll ()
+		public void ConvertAll ()
 		{
-			try {
-				CleanOutput();
-				CopyAssets();
-				return ConvertAllInternal();
-			} catch (Exception ex) {
-				return new ConverterResult(true, ex.Message, null);
-			}
+            CleanOutput();
+            CopyAssets();
+            ConvertAllInternal();
 		}
 
 		private void CleanOutput ()
@@ -57,59 +71,91 @@ namespace DevTyr.Gullap
 			DirectoryExtensions.DirectoryCopy(Paths.AssetsPath, Paths.OutputPath, true);
 		}
 
-		private ConverterResult ConvertAllInternal ()
+		private void ConvertAllInternal ()
 		{
-			var sourceFiles = Directory.GetFiles (Paths.PagesPath, "*.*", SearchOption.AllDirectories);
-			
-			var fileInfos = sourceFiles.Select(sourceFile => internalParser.ParseFile(sourceFile)).ToList();
+		    var workspaceInfo = new WorkspaceInfo(Paths);
+		    var pages = workspaceInfo.GetPages().ToList();
 
-		    var menuBuilder = new MenuBuilder ();
-			var mainMenu = menuBuilder.Build (fileInfos);
-			
-			var successMessages = new List<string>();
-			
-			foreach (var info in fileInfos) {
-				ExportMarkdown (info, mainMenu);
-				if (string.IsNullOrWhiteSpace(info.TargetFileName)) {
-					successMessages.Add("Handled (not exported) " + Path.GetFileName(info.FileName));
-				} else {
-					successMessages.Add("Exported " + info.TargetFileName);
-				}
+		    FillCategoryPages(pages);
+
+            Trace.TraceInformation("Parsing contents for {0} files", pages.Count);
+
+		    ParseContents(pages);
+
+            Trace.TraceInformation("Generating template data");
+            Trace.TraceInformation("Found {0} pages", pages.Count);
+
+			foreach (var page in pages) 
+            {
+                dynamic metadata = ParseTemplateData(pages, page.Page);
+
+				Export (page, metadata);
+                Trace.TraceInformation("Exported {0}", page.FileName);
 			}
-			return new ConverterResult(false, null, successMessages);
 		}
+
+        private void FillCategoryPages(List<MetaPage> pages)
+        {
+            foreach (var page in pages)
+            {
+                if (!string.IsNullOrWhiteSpace(page.Page.Category))
+                {
+                    page.Page.CategoryPages = pages.Where(item => item.Page.Category == page.Page.Category).Select(item => item.Page).ToList();
+                }
+            }
+        }
+
+        private dynamic ParseTemplateData(IEnumerable<MetaPage> metaPages, Page currentPage)
+        {
+            dynamic metadata = new
+            {
+                site = new
+                {
+                    config = Options.SiteConfiguration,
+                    time = DateTime.Now,
+                    pages = metaPages.Where(page => !page.Page.Draft).Select(page => page.Page).ToArray(),
+                    categories = metaPages.Where(page => !string.IsNullOrWhiteSpace(page.Page.Category)).Select(t => new  { t.Page.Category, t.Page }).ToDictionary(arg => arg, arg => arg)
+                },
+                current = currentPage
+            };
+
+            return metadata;
+        }
+
+        private void ParseContents(IEnumerable<MetaPage> metaPages)
+        {
+            foreach (var page in metaPages)
+            {
+                Trace.TraceInformation("Parsing content for " + page.FileName);
+                page.Page.Content = internalParser.Parse(page.Page.Content);
+            }
+        }
 
 		private void EnsureTargetPath (string targetPath)
 		{
-			if (!Directory.Exists (targetPath)) 
+		    var directory = Path.GetDirectoryName(targetPath);
+
+			if (!Directory.Exists(directory)) 
 			{
-				Directory.CreateDirectory(Path.Combine(Paths.OutputPath, targetPath));
+				Directory.CreateDirectory(directory);
 			}
 		}
 
-		private void ExportMarkdown (ParsedFileInfo info, MainMenu mainMenu)
+		private void Export (MetaPage page, dynamic metadata)
 		{
-		    if (!info.ShouldBeGenerated) return;
+		    var targetPath = page.GetTargetFileName(Paths);
 
-		    var directoryName = Path.GetDirectoryName (info.TargetFileName);
-		    Console.WriteLine (info.TargetFileName);
-		    if (string.IsNullOrEmpty (directoryName))
-		        directoryName = Environment.CurrentDirectory;
-		    EnsureTargetPath (directoryName);
+		    if (string.IsNullOrWhiteSpace(page.Page.Template))
+		    {
+                Trace.TraceWarning("No template given for file {0}", page.FileName);
+		        return;
+		    }
 
-		    var sidebarItems = mainMenu.GetSidebarItems(info.Sidebar);
+		    EnsureTargetPath (targetPath);
 
-		    var templateData = new { content = info.ParsedContent, menu = mainMenu, title = info.Title, date = info.Date, description = info.Description, author = info.Author, sidebarheader = info.Sidebar, sidebaritems = sidebarItems, keywords = info.Keywords };
+		    var result = internalTemplater.Transform (Paths.TemplatePath, page.Page.Template, metadata);
 
-		    var result = internalTemplater.Transform (Paths.TemplatePath, info.Template, templateData);
-
-		    var target = CalculateTargetFileName(info);
-		    File.WriteAllText (target, result);
-		}
-
-		private string CalculateTargetFileName (ParsedFileInfo info)
-		{
-			return Path.Combine(Paths.OutputPath, info.TargetFileName);
+		    File.WriteAllText (targetPath, result);
 		}
 	}
 }

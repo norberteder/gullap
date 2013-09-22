@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -30,6 +30,7 @@
     <ConsolePause>False</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="MarkdownSharp">
       <HintPath>..\Dependencies\MarkdownSharp.dll</HintPath>
@@ -37,19 +38,29 @@
     <Reference Include="Nustache.Core">
       <HintPath>..\Dependencies\Nustache.Core.dll</HintPath>
     </Reference>
+    <Reference Include="YamlDotNet.Core">
+      <HintPath>..\Dependencies\YamlDotNet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet.Dynamic">
+      <HintPath>..\Dependencies\YamlDotNet.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet.RepresentationModel">
+      <HintPath>..\Dependencies\YamlDotNet.RepresentationModel.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="ConverterOptions.cs" />
-    <Compile Include="Menu\MenuBuilder.cs" />
-    <Compile Include="Menu\MainMenu.cs" />
-    <Compile Include="Menu\MenuItem.cs" />
-    <Compile Include="Menu\MenuCategory.cs" />
-    <Compile Include="ConverterResult.cs" />
+    <Compile Include="IO\WorkspaceInfo.cs" />
+    <Compile Include="Model\MetaPage.cs" />
+    <Compile Include="Model\MetaPageExtensions.cs" />
+    <Compile Include="Model\Page.cs" />
+    <Compile Include="Model\SiteConfiguration.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\ParsedFileInfo.cs" />
     <Compile Include="Parser\ParserKeys.cs" />
+    <Compile Include="SiteConfigurationParser.cs" />
     <Compile Include="Templating\ITemplater.cs" />
     <Compile Include="Parser\Markdown\MarkdownParser.cs" />
     <Compile Include="Templating\Nustache\NustacheTemplater.cs" />
@@ -57,13 +68,9 @@
     <Compile Include="Extensions\DirectoryExtensions.cs" />
     <Compile Include="SiteGenerator.cs" />
     <Compile Include="SitePaths.cs" />
+    <Compile Include="Yaml\InvalidPageException.cs" />
+    <Compile Include="Yaml\PageParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="Menu\" />
-    <Folder Include="Parser\" />
-    <Folder Include="Templating\" />
-    <Folder Include="Templating\Nustache\" />
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

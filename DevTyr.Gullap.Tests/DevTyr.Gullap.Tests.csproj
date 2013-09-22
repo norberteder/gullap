@@ -9,6 +9,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DevTyr.Gullap.Tests</RootNamespace>
     <AssemblyName>DevTyr.Gullap.Tests</AssemblyName>
+    <ProjectGuid>{881FC0A6-3492-491B-AD7B-E2B1910B8DC3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DevTyr.Gullap.Tests</RootNamespace>
+    <AssemblyName>DevTyr.Gullap.Tests</AssemblyName>
     <ReleaseVersion>1.0.1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,10 +34,39 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\Dependencies\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="With_Converter\For_Null\When_options_are_incorrect.cs" />
+    <Compile Include="With_Converter\For_Null\When_parser_is_null.cs" />
+    <Compile Include="With_Converter\For_Null\When_templater_is_null.cs" />
+    <Compile Include="With_MarkdownParser\For_CorrectProcessing\When_content_is_valid.cs" />
+    <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_empty.cs" />
+    <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_null.cs" />
+    <Compile Include="With_PageParser\Acceptance_Criteria\Case_of_complex_front_matter.cs" />
+    <Compile Include="With_PageParser\Acceptance_Criteria\Case_of_simple_front_matter.cs" />
+    <Compile Include="With_PageParser\For_ParsingData\When_content_is_invalid.cs" />
+    <Compile Include="With_PageParser\For_ParsingData\When_front_matter_is_parsed.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DevTyr.Gullap\DevTyr.Gullap.csproj">
+      <Project>{6848b621-476c-4509-8bbf-3b887e765a57}</Project>
+      <Name>DevTyr.Gullap</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\Dependencies\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="With_Guard\For_NotNull\When_argument_is_null.cs" />
@@ -43,12 +76,13 @@
     <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_not_null.cs" />
     <Compile Include="With_Guard\For_NotNullOrEmpty\When_argument_is_null.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\DevTyr.Gullap\DevTyr.Gullap.csproj">
       <Project>{6848B621-476C-4509-8BBF-3B887E765A57}</Project>
       <Name>DevTyr.Gullap</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
   <ItemGroup />
 </Project>

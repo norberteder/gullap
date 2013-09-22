@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace DevTyr.Gullap.GullapConsole
 {
@@ -18,6 +19,8 @@ namespace DevTyr.Gullap.GullapConsole
         {
             ShowInfo();
 
+            ConfigureTrace();
+
             var cmdOptions = GenerateOptionsFromArguments(args);
 
             if (string.IsNullOrWhiteSpace(cmdOptions.SitePath) ||
@@ -29,7 +32,8 @@ namespace DevTyr.Gullap.GullapConsole
 
             var options = new ConverterOptions
             {
-                SitePath = cmdOptions.SitePath
+                SitePath = cmdOptions.SitePath,
+                SiteConfiguration = SiteConfigurationParser.LoadSiteConfiguration("config.yml")
             };
 
             var watch = new Stopwatch();
@@ -37,38 +41,21 @@ namespace DevTyr.Gullap.GullapConsole
 
             var converter = new Converter(options);
 
-            ConverterResult result = null;
-
             if (cmdOptions.InitializeSite)
             {
                 converter.InitializeSite();
-                Console.WriteLine("Site [" + cmdOptions.SitePath + "] generated");
+                Trace.TraceInformation("Site [{0}] generated", cmdOptions.SitePath);
             }
 
             if (cmdOptions.GenerateSite)
             {
-                result = converter.ConvertAll();
+                converter.ConvertAll();
             }
 
             watch.Stop();
 
-            if (result != null)
-            {
-                if (result.HasError)
-                {
-                    Console.WriteLine(result.ErrorMessage);
-                }
-                else
-                {
-                    if (result.SuccessMessages != null)
-                    {
-                        foreach (string msg in result.SuccessMessages)
-                            Console.WriteLine(msg);
-                    }
-                }
-            }
-            Console.WriteLine();
-            Console.WriteLine("Finished in {0}", watch.Elapsed);
+            Trace.WriteLine("");
+            Trace.TraceInformation("Finished in {0}", watch.Elapsed);
         }
 
         private static Options GenerateOptionsFromArguments(IEnumerable<string> args)
@@ -93,22 +80,34 @@ namespace DevTyr.Gullap.GullapConsole
                 }
                 else
                 {
-                    Console.WriteLine("Site directory [" + arg + "] must be created manually");
+                    Trace.TraceInformation("Site directory [{0}] must be created manually", arg);
                 }
             }
+
+            if (string.IsNullOrWhiteSpace(cmdOptions.SitePath))
+                cmdOptions.SitePath = Environment.CurrentDirectory;
+
             return cmdOptions;
         }
 
         private static void ShowHelp()
         {
-            Console.WriteLine("GullapConsole -i [SitePath]\t\tInitialize Site");
-            Console.WriteLine("GullapConsole -g [SitePath]\t\tGenerate Site");
+            Console.WriteLine("GullapConsole -i [SitePath]  Initialize Site");
+            Console.WriteLine("GullapConsole -g [SitePath]  Generate Site");
+            Console.WriteLine("GullapConsole -g             Generate Site [current location]");
         }
 
         private static void ShowInfo()
         {
-            Console.WriteLine("DevTyr Gullap");
-            Console.WriteLine("http://devtyr.com");
+            Console.WriteLine("DevTyr Gullap {0} | {1}", Assembly.GetExecutingAssembly().GetName().Version, "http://devtyr.com");
+            Console.WriteLine();
+        }
+
+        private static void ConfigureTrace()
+        {
+            var listener = new ConsoleTraceListener();
+            Trace.Listeners.Add(listener);
+            Trace.AutoFlush = true;
         }
     }
 }
