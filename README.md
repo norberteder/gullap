@@ -81,7 +81,7 @@ The site section contains the following possibilities:
 * pages
 * categories
 
-`config` contains the site's configuration that can be defined in the file `config.yaml`. This is an optional configuration. Currently only the site title can be set (attribute name `title`). `time` represents the date/time of the generation. `pages` contains all pages (the available attributes are the same as defined by the YAML front matter). `categories` is a dictionary containing the pages mapped to their category.
+`config` contains the site's configuration that can be defined in the file `config.yml`. This is an optional configuration. Currently only the site title can be set (attribute name `title`). `time` represents the date/time of the generation. `pages` contains all pages (the available attributes are the same as defined by the YAML front matter). `categories` is a dictionary containing the pages mapped to their category.
 
 ### current
 
