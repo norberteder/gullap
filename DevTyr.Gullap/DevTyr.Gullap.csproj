@@ -53,7 +53,7 @@
     <Compile Include="Converter.cs" />
     <Compile Include="ConverterOptions.cs" />
     <Compile Include="IO\FileSystem.cs" />
-    <Compile Include="IO\WorkspaceData.cs" />
+    <Compile Include="IO\WorkspaceFiles.cs" />
     <Compile Include="IO\WorkspaceInfo.cs" />
     <Compile Include="Model\MetaPage.cs" />
     <Compile Include="Model\MetaPageExtensions.cs" />

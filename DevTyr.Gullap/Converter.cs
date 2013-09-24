@@ -76,7 +76,7 @@ namespace DevTyr.Gullap
 		    var workspaceInfo = new WorkspaceInfo(Paths);
 		    var workspaceFiles = workspaceInfo.GetPages();
 
-		    var pagesToParse = workspaceFiles.YamlFiles;
+		    var pagesToParse = workspaceFiles.FilesToParse;
 
 		    FillCategoryPages(pagesToParse);
 
@@ -95,7 +95,7 @@ namespace DevTyr.Gullap
                 Trace.TraceInformation("Exported {0}", page.FileName);
 			}
 
-		    foreach (var file in workspaceFiles.DoNotParseFiles)
+		    foreach (var file in workspaceFiles.FilesNotToParse)
 		    {
 		        Copy(file);
 		    }

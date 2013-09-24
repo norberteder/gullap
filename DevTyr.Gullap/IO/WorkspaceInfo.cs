@@ -16,12 +16,12 @@ namespace DevTyr.Gullap.IO
             Paths = paths;
         }
 
-        public WorkspaceData GetPages()
+        public WorkspaceFiles GetPages()
         {
             if (!Directory.Exists(Paths.PagesPath))
                 throw new DirectoryNotFoundException();
 
-            var workspaceFiles = new WorkspaceData();
+            var workspaceFiles = new WorkspaceFiles();
 
             var sourceFiles = Directory.GetFiles(Paths.PagesPath, "*.*", SearchOption.AllDirectories);
             var pageParser = new PageParser();
@@ -44,12 +44,12 @@ namespace DevTyr.Gullap.IO
                     Trace.TraceWarning("Invalid YAML Front Matter for file " + file);
                     var fileExtension = Path.GetExtension(file);
                     if (!string.IsNullOrWhiteSpace(fileExtension) && (fileExtension.ToLowerInvariant() == ".html" || fileExtension.ToLowerInvariant() == ".htm"))
-                        workspaceFiles.DoNotParseFiles.Add(file);
+                        workspaceFiles.FilesNotToParse.Add(file);
                 }
 
                 if (metaPage != null)
                 {
-                    workspaceFiles.YamlFiles.Add(metaPage);
+                    workspaceFiles.FilesToParse.Add(metaPage);
                 }
             }
 
