@@ -74,24 +74,31 @@ namespace DevTyr.Gullap
 		private void ConvertAllInternal ()
 		{
 		    var workspaceInfo = new WorkspaceInfo(Paths);
-		    var pages = workspaceInfo.GetPages().ToList();
+		    var workspaceFiles = workspaceInfo.GetPages();
 
-		    FillCategoryPages(pages);
+		    var pagesToParse = workspaceFiles.YamlFiles;
 
-            Trace.TraceInformation("Parsing contents for {0} files", pages.Count);
+		    FillCategoryPages(pagesToParse);
 
-		    ParseContents(pages);
+            Trace.TraceInformation("Parsing contents for {0} files", pagesToParse.Count);
+
+		    ParseContents(pagesToParse);
 
             Trace.TraceInformation("Generating template data");
-            Trace.TraceInformation("Found {0} pages", pages.Count);
+            Trace.TraceInformation("Found {0} pages", pagesToParse.Count);
 
-			foreach (var page in pages) 
+			foreach (var page in pagesToParse) 
             {
-                dynamic metadata = ParseTemplateData(pages, page.Page);
+                dynamic metadata = ParseTemplateData(pagesToParse, page.Page);
 
 				Export (page, metadata);
                 Trace.TraceInformation("Exported {0}", page.FileName);
 			}
+
+		    foreach (var file in workspaceFiles.DoNotParseFiles)
+		    {
+		        Copy(file);
+		    }
 		}
 
         private void FillCategoryPages(List<MetaPage> pages)
@@ -105,7 +112,7 @@ namespace DevTyr.Gullap
             }
         }
 
-        private dynamic ParseTemplateData(IEnumerable<MetaPage> metaPages, Page currentPage)
+        private dynamic ParseTemplateData(List<MetaPage> metaPages, Page currentPage)
         {
             dynamic metadata = new
             {
@@ -135,10 +142,7 @@ namespace DevTyr.Gullap
 		{
 		    var directory = Path.GetDirectoryName(targetPath);
 
-			if (!Directory.Exists(directory)) 
-			{
-				Directory.CreateDirectory(directory);
-			}
+            EnsureDirectory(directory);
 		}
 
 		private void Export (MetaPage page, dynamic metadata)
@@ -157,6 +161,22 @@ namespace DevTyr.Gullap
 
 		    File.WriteAllText (targetPath, result);
 		}
+
+	    private void Copy(string file)
+	    {
+            var targetDirectory = Path.GetDirectoryName(file.Replace(Paths.PagesPath, Paths.OutputPath));
+
+	        EnsureDirectory(targetDirectory);
+
+	        var targetFileName = Path.GetFileName(file);
+            File.Copy(file, Path.Combine(targetDirectory, targetFileName));
+	    }
+
+	    private void EnsureDirectory(string directory)
+	    {
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+	    }
 	}
 }
 

@@ -16,10 +16,12 @@ namespace DevTyr.Gullap.IO
             Paths = paths;
         }
 
-        public IEnumerable<MetaPage> GetPages()
+        public WorkspaceData GetPages()
         {
             if (!Directory.Exists(Paths.PagesPath))
                 throw new DirectoryNotFoundException();
+
+            var workspaceFiles = new WorkspaceData();
 
             var sourceFiles = Directory.GetFiles(Paths.PagesPath, "*.*", SearchOption.AllDirectories);
             var pageParser = new PageParser();
@@ -40,11 +42,16 @@ namespace DevTyr.Gullap.IO
                 catch (InvalidPageException ipe)
                 {
                     Trace.TraceWarning("Invalid YAML Front Matter for file " + file);
+                    workspaceFiles.DoNotParseFiles.Add(file);
                 }
 
                 if (metaPage != null)
-                    yield return metaPage;
+                {
+                    workspaceFiles.YamlFiles.Add(metaPage);
+                }
             }
+
+            return workspaceFiles;
         }
     }
 }
