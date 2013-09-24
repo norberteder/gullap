@@ -3,6 +3,7 @@
 **1.2.0**
 
 - Markdown and HTML files (html, htm) can be mixed. HTML files won't be parsed, just copied.
+- Added support of blog posts
 
 **1.1.0**
 
