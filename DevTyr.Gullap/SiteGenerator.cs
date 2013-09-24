@@ -1,4 +1,5 @@
 using System.IO;
+using DevTyr.Gullap.IO;
 
 namespace DevTyr.Gullap
 {
@@ -6,20 +7,10 @@ namespace DevTyr.Gullap
 	{
 		public void Generate (SitePaths paths)
 		{
-			if (!Directory.Exists(paths.SitePath))
-				Directory.CreateDirectory(paths.SitePath);
-
-			if (!Directory.Exists(paths.AssetsPath))
-				Directory.CreateDirectory(paths.AssetsPath);
-
-			if (!Directory.Exists(paths.OutputPath))
-				Directory.CreateDirectory(paths.OutputPath);
-
-			if (!Directory.Exists(paths.PagesPath))
-				Directory.CreateDirectory(paths.PagesPath);
-
-			if (!Directory.Exists(paths.TemplatePath))
-				Directory.CreateDirectory(paths.TemplatePath);
+            FileSystem.EnsureDirectory(paths.SitePath);
+            FileSystem.EnsureDirectory(paths.AssetsPath);
+            FileSystem.EnsureDirectory(paths.OutputPath);
+            FileSystem.EnsureDirectory(paths.PagesPath);
 		}
 	}
 }

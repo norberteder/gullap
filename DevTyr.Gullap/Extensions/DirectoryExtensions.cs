@@ -1,4 +1,5 @@
 using System.IO;
+using DevTyr.Gullap.IO;
 
 namespace DevTyr.Gullap.Extensions
 {
@@ -14,12 +15,9 @@ namespace DevTyr.Gullap.Extensions
 				throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName);
 			}
 			
-			if (!Directory.Exists(destDirName))
-			{
-				Directory.CreateDirectory(destDirName);
-			}
-			
-			var files = dir.GetFiles();
+            FileSystem.EnsureDirectory(destDirName);
+
+            var files = dir.GetFiles();
 			foreach (var file in files)
 			{
 				var temppath = Path.Combine(destDirName, file.Name);

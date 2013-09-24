@@ -142,7 +142,7 @@ namespace DevTyr.Gullap
 		{
 		    var directory = Path.GetDirectoryName(targetPath);
 
-            EnsureDirectory(directory);
+            FileSystem.EnsureDirectory(directory);
 		}
 
 		private void Export (MetaPage page, dynamic metadata)
@@ -166,16 +166,10 @@ namespace DevTyr.Gullap
 	    {
             var targetDirectory = Path.GetDirectoryName(file.Replace(Paths.PagesPath, Paths.OutputPath));
 
-	        EnsureDirectory(targetDirectory);
+	        FileSystem.EnsureDirectory(targetDirectory);
 
 	        var targetFileName = Path.GetFileName(file);
             File.Copy(file, Path.Combine(targetDirectory, targetFileName));
-	    }
-
-	    private void EnsureDirectory(string directory)
-	    {
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
 	    }
 	}
 }
