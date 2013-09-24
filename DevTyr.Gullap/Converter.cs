@@ -157,13 +157,6 @@ namespace DevTyr.Gullap
             }
         }
 
-		private void EnsureTargetPath (string targetPath)
-		{
-		    var directory = Path.GetDirectoryName(targetPath);
-
-            FileSystem.EnsureDirectory(directory);
-		}
-
 		private void Export (MetaContent metaContent, dynamic metadata)
 		{
 		    var targetPath = metaContent.GetTargetFileName(Paths);
@@ -174,7 +167,7 @@ namespace DevTyr.Gullap
 		        return;
 		    }
 
-		    EnsureTargetPath (targetPath);
+            FileSystem.EnsureDirectory(targetPath);
 
 		    var result = internalTemplater.Transform (Paths.TemplatePath, metaContent.GetTemplate(), metadata);
 

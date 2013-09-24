@@ -6,8 +6,10 @@ namespace DevTyr.Gullap.IO
     {
         public static void EnsureDirectory(string directory)
         {
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            var directoryToEnsure = Path.GetDirectoryName(directory);
+
+            if (!Directory.Exists(directoryToEnsure))
+                Directory.CreateDirectory(directoryToEnsure);
         }
     }
 }
