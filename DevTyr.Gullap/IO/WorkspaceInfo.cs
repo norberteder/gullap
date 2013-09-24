@@ -42,7 +42,9 @@ namespace DevTyr.Gullap.IO
                 catch (InvalidPageException ipe)
                 {
                     Trace.TraceWarning("Invalid YAML Front Matter for file " + file);
-                    workspaceFiles.DoNotParseFiles.Add(file);
+                    var fileExtension = Path.GetExtension(file);
+                    if (!string.IsNullOrWhiteSpace(fileExtension) && (fileExtension.ToLowerInvariant() == ".html" || fileExtension.ToLowerInvariant() == ".htm"))
+                        workspaceFiles.DoNotParseFiles.Add(file);
                 }
 
                 if (metaPage != null)
