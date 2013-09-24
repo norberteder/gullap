@@ -1,5 +1,9 @@
 # RELEASE NOTES
 
+**1.2.0**
+
+- Markdown and HTML files (html, htm) can be mixed. HTML files won't be parsed, just copied.
+
 **1.1.0**
 
 - Replaced current file header with a Yaml Front Matter (breaking!!)
