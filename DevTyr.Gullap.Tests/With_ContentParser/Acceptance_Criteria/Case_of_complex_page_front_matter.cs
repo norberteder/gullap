@@ -5,12 +5,12 @@ using DevTyr.Gullap.Yaml;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
+namespace DevTyr.Gullap.Tests.With_ContentParser.Acceptance_Criteria
 {
 	[TestFixture]
-	public class Case_of_complex_front_matter
+	public class Case_of_complex_page_front_matter
 	{
-		readonly PageParser parser = new PageParser ();
+		readonly ContentParser parser = new ContentParser ();
 		readonly SampleYamlFrontMatter sample = new SampleYamlFrontMatter {
 			Text = @"---
 title: 'NOW: Colons!'
@@ -55,7 +55,7 @@ Yes!
 		[Test]
 		public void Can_parse_content()
 		{
-		    var page = parser.Parse(sample.Text);
+		    var page = parser.ParsePage(sample.Text);
 
 		    page.Title
 		        .Should()

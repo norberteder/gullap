@@ -6,9 +6,23 @@ using YamlDotNet.Dynamic;
 
 namespace DevTyr.Gullap.Yaml
 {
-    public class PageParser
+    public class ContentParser
     {
-        public Page Parse(string content)
+        public Page ParsePage(string content)
+        {
+            var splitted = ParseInternal(content);
+            var parsed = new DynamicYaml(splitted[0]);
+            return new Page(parsed, splitted[1].Trim());
+        }
+
+        public Post ParsePost(string content)
+        {
+            var splitted = ParseInternal(content);
+            var parsed = new DynamicYaml(splitted[0]);
+            return new Post(parsed, splitted[1].Trim());
+        }
+
+        private string[] ParseInternal(string content)
         {
             var splitted = Regex.Split(content, "^---" + Environment.NewLine, RegexOptions.Multiline);
 
@@ -21,10 +35,7 @@ namespace DevTyr.Gullap.Yaml
             if (splitted.Length != 2)
                 throw new InvalidPageException();
 
-            var parsed = new DynamicYaml(splitted[0]);
-
-            return new Page(parsed, splitted[1].Trim());
-
+            return splitted;
         }
     }
 }

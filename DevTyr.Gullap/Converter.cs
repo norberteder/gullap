@@ -74,25 +74,25 @@ namespace DevTyr.Gullap
 		private void ConvertAllInternal ()
 		{
 		    var workspaceInfo = new WorkspaceInfo(Paths);
-		    var workspaceFiles = workspaceInfo.GetPages();
+		    var workspaceFiles = workspaceInfo.GetContents();
 
-		    var pagesToParse = workspaceFiles.FilesToParse;
+		    var contentsToParse = workspaceFiles.FilesToParse;
 
-		    FillCategoryPages(pagesToParse);
+		    FillCategoryPages(contentsToParse);
 
-            Trace.TraceInformation("Parsing contents for {0} files", pagesToParse.Count);
+            Trace.TraceInformation("Parsing contents for {0} files", contentsToParse.Count);
 
-		    ParseContents(pagesToParse);
+		    ParseContents(contentsToParse);
 
             Trace.TraceInformation("Generating template data");
-            Trace.TraceInformation("Found {0} pages", pagesToParse.Count);
+            Trace.TraceInformation("Found {0} pages", contentsToParse.Count);
 
-			foreach (var page in pagesToParse) 
+			foreach (var content in contentsToParse) 
             {
-                dynamic metadata = ParseTemplateData(pagesToParse, page.Page);
+                dynamic metadata = content.Page != null ? ParseTemplateData(contentsToParse, content.Page) : ParseTemplateData(contentsToParse, content.Post);
 
-				Export (page, metadata);
-                Trace.TraceInformation("Exported {0}", page.FileName);
+				Export (content, metadata);
+                Trace.TraceInformation("Exported {0}", content.FileName);
 			}
 
 		    foreach (var file in workspaceFiles.FilesNotToParse)
@@ -101,18 +101,28 @@ namespace DevTyr.Gullap
 		    }
 		}
 
-        private void FillCategoryPages(List<MetaPage> pages)
+        private void FillCategoryPages(List<MetaContent> metaContents)
         {
-            foreach (var page in pages)
+            foreach (var content in metaContents)
             {
-                if (!string.IsNullOrWhiteSpace(page.Page.Category))
+                if (content.Post != null && !string.IsNullOrWhiteSpace(content.Post.Category))
                 {
-                    page.Page.CategoryPages = pages.Where(item => item.Page.Category == page.Page.Category).Select(item => item.Page).ToList();
+                    content.Post.CategoryPosts =
+                        metaContents.Where(item =>  item.Post != null && !string.IsNullOrWhiteSpace(item.Post.Category) && item.Post.Category == content.Post.Category)
+                            .Select(item => item.Post)
+                            .ToList();
+                }
+                if (content.Page != null && !string.IsNullOrWhiteSpace(content.Page.Category))
+                {
+                    content.Page.CategoryPages =
+                        metaContents.Where(item => item.Page != null && !string.IsNullOrWhiteSpace(item.Page.Category) && item.Page.Category == content.Page.Category)
+                            .Select(item => item.Page)
+                            .ToList();
                 }
             }
         }
 
-        private dynamic ParseTemplateData(List<MetaPage> metaPages, Page currentPage)
+        private dynamic ParseTemplateData(List<MetaContent> metaContents, ContentBase currentContent)
         {
             dynamic metadata = new
             {
@@ -120,21 +130,30 @@ namespace DevTyr.Gullap
                 {
                     config = Options.SiteConfiguration,
                     time = DateTime.Now,
-                    pages = metaPages.Where(page => !page.Page.Draft).Select(page => page.Page).ToArray(),
-                    categories = metaPages.Where(page => !string.IsNullOrWhiteSpace(page.Page.Category)).Select(t => new  { t.Page.Category, t.Page }).ToDictionary(arg => arg, arg => arg)
+                    pages = metaContents.Where(content => content.Page != null && !content.Page.Draft).Select(content => content.Page).ToArray(),
+                    posts = metaContents.Where(content => content.Post != null && !content.Post.Draft).Select(content => content.Post).ToArray(),
+                    pageCategories = metaContents.Where(content => content.Page != null && !string.IsNullOrWhiteSpace(content.Page.Category)).Select(t => new  { t.Page.Category, t.Page }).ToDictionary(arg => arg, arg => arg),
+                    postCategories = metaContents.Where(content => content.Post != null && !string.IsNullOrWhiteSpace(content.Post.Category)).Select(t => new { t.Post.Category, t.Post}).ToDictionary(arg => arg, arg => arg)
                 },
-                current = currentPage
+                current = currentContent
             };
 
             return metadata;
         }
 
-        private void ParseContents(IEnumerable<MetaPage> metaPages)
+        private void ParseContents(IEnumerable<MetaContent> metaContents)
         {
-            foreach (var page in metaPages)
+            foreach (var content in metaContents)
             {
-                Trace.TraceInformation("Parsing content for " + page.FileName);
-                page.Page.Content = internalParser.Parse(page.Page.Content);
+                Trace.TraceInformation("Parsing content for " + content.FileName);
+                if (content.Page != null)
+                {
+                    content.Page.Content = internalParser.Parse(content.Page.Content);
+                }
+                if (content.Post != null)
+                {
+                    content.Post.Content = internalParser.Parse(content.Post.Content);
+                }
             }
         }
 
@@ -145,26 +164,26 @@ namespace DevTyr.Gullap
             FileSystem.EnsureDirectory(directory);
 		}
 
-		private void Export (MetaPage page, dynamic metadata)
+		private void Export (MetaContent metaContent, dynamic metadata)
 		{
-		    var targetPath = page.GetTargetFileName(Paths);
+		    var targetPath = metaContent.GetTargetFileName(Paths);
 
-		    if (string.IsNullOrWhiteSpace(page.Page.Template))
+		    if (!metaContent.HasValidTemplate())
 		    {
-                Trace.TraceWarning("No template given for file {0}", page.FileName);
+                Trace.TraceWarning("No template given for file {0}", metaContent.FileName);
 		        return;
 		    }
 
 		    EnsureTargetPath (targetPath);
 
-		    var result = internalTemplater.Transform (Paths.TemplatePath, page.Page.Template, metadata);
+		    var result = internalTemplater.Transform (Paths.TemplatePath, metaContent.GetTemplate(), metadata);
 
 		    File.WriteAllText (targetPath, result);
 		}
 
 	    private void Copy(string file)
 	    {
-            var targetDirectory = Path.GetDirectoryName(file.Replace(Paths.PagesPath, Paths.OutputPath));
+            var targetDirectory = Path.GetDirectoryName(file.Replace(Paths.PagesPath, Paths.OutputPath).Replace(Paths.PostsPath, Paths.OutputPath));
 
 	        FileSystem.EnsureDirectory(targetDirectory);
 

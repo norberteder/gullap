@@ -3,12 +3,12 @@ using DevTyr.Gullap.Yaml;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
+namespace DevTyr.Gullap.Tests.With_ContentParser.Acceptance_Criteria
 {
     [TestFixture]
-	public class Case_of_simple_front_matter
+	public class Case_of_simple_page_front_matter
     {
-        readonly PageParser parser = new PageParser ();
+        readonly ContentParser parser = new ContentParser ();
 		readonly SampleYamlFrontMatter sample = new SampleYamlFrontMatter 
         {
 			Text = 
@@ -42,7 +42,7 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
         [Test]
         public void Can_parse_content()
         {
-            var page = parser.Parse(sample.Text);
+            var page = parser.ParsePage(sample.Text);
 
             page.Content
 				.Should ()
@@ -52,7 +52,7 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
 		[Test]
 		public void Can_parse_title()
 		{
-		    var page = parser.Parse(sample.Text);
+		    var page = parser.ParsePage(sample.Text);
 
 			page.Title
 				.Should ()
@@ -62,7 +62,7 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
         [Test]
         public void Can_parse_having_only_title()
         {
-            var page = parser.Parse(sampleOnlyTitle.Text);
+            var page = parser.ParsePage(sampleOnlyTitle.Text);
 
             page.Title
                 .Should()
@@ -72,7 +72,7 @@ namespace DevTyr.Gullap.Tests.With_PageParser.Acceptance_Criteria
         [Test]
         public void Can_parse_having_hyphens_within_content()
         {
-            var page = parser.Parse(sampleOnlyTitleHavingHyphensInContent.Text);
+            var page = parser.ParsePage(sampleOnlyTitleHavingHyphensInContent.Text);
 
             page.Title
                 .Should()

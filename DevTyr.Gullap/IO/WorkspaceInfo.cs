@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using DevTyr.Gullap.Model;
 using DevTyr.Gullap.Yaml;
 
@@ -16,28 +16,46 @@ namespace DevTyr.Gullap.IO
             Paths = paths;
         }
 
-        public WorkspaceFiles GetPages()
+        public WorkspaceFiles GetContents()
         {
+            if (!Directory.Exists(Paths.PostsPath))
+                throw new DirectoryNotFoundException(Paths.PostsPath);
+
             if (!Directory.Exists(Paths.PagesPath))
-                throw new DirectoryNotFoundException();
+                throw new DirectoryNotFoundException(Paths.PagesPath);
 
             var workspaceFiles = new WorkspaceFiles();
 
-            var sourceFiles = Directory.GetFiles(Paths.PagesPath, "*.*", SearchOption.AllDirectories);
-            var pageParser = new PageParser();
+            var pageFiles = Directory.GetFiles(Paths.PagesPath, "*.*", SearchOption.AllDirectories);
+            var postFiles = Directory.GetFiles(Paths.PostsPath, "*.*", SearchOption.AllDirectories);
+            Console.WriteLine("Found {0} posts", postFiles);
+            var sourceFiles = pageFiles.Concat(postFiles);
+
+            var pageParser = new ContentParser();
 
             foreach (var file in sourceFiles)
             {
                 var content = File.ReadAllText(file);
-                MetaPage metaPage = null;
+                var isPage = file.Contains(Paths.PagesPath);
+
+                MetaContent metaContent = null;
                 try
                 {
                     Trace.TraceInformation("Reading file {0}", file);
-                    var page = pageParser.Parse(content);
-
-                    metaPage = new MetaPage(file) {Page = page};
-
-                    metaPage.Page.Url = metaPage.GetTargetFileName(Paths).Replace(Paths.OutputPath, "").Replace('\\', '/');
+                    if (isPage)
+                    {
+                        var parsed = pageParser.ParsePage(content);
+                        metaContent = new MetaContent(file) {Page = parsed};
+                        metaContent.Page.Url =
+                            metaContent.GetTargetFileName(Paths).Replace(Paths.OutputPath, "").Replace('\\', '/');
+                    }
+                    else
+                    {
+                        var parsed = pageParser.ParsePost(content);
+                        metaContent = new MetaContent(file) { Post = parsed};
+                        metaContent.Post.Url =
+                            metaContent.GetTargetFileName(Paths).Replace(Paths.OutputPath, "").Replace('\\', '/');
+                    }
                 } 
                 catch (InvalidPageException ipe)
                 {
@@ -47,9 +65,9 @@ namespace DevTyr.Gullap.IO
                         workspaceFiles.FilesNotToParse.Add(file);
                 }
 
-                if (metaPage != null)
+                if (metaContent != null)
                 {
-                    workspaceFiles.FilesToParse.Add(metaPage);
+                    workspaceFiles.FilesToParse.Add(metaContent);
                 }
             }
 

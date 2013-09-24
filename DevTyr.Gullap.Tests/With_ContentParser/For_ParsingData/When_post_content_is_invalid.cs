@@ -2,18 +2,18 @@
 using DevTyr.Gullap.Yaml;
 using NUnit.Framework;
 
-namespace DevTyr.Gullap.Tests.With_PageParser.For_ParsingData
+namespace DevTyr.Gullap.Tests.With_ContentParser.For_ParsingData
 {
     [TestFixture]
-    public class When_content_is_invalid
+    public class When_post_content_is_invalid
     {
         [Test]
         public void Should_throw_invalidpageexception()
         {
             const string data = "invalid yaml front matter";
-            var parser = new PageParser();
+            var parser = new ContentParser();
             
-            Assert.Throws<InvalidPageException>(() => parser.Parse(data));
+            Assert.Throws<InvalidPageException>(() => parser.ParsePost(data));
         }
 
         [Test]
@@ -23,8 +23,8 @@ namespace DevTyr.Gullap.Tests.With_PageParser.For_ParsingData
                              " " + Environment.NewLine +
                              "title: Test" + Environment.NewLine +
                              "---";
-            var parser = new PageParser();
-            Assert.Throws<InvalidPageException>(() => parser.Parse(sampleData));
+            var parser = new ContentParser();
+            Assert.Throws<InvalidPageException>(() => parser.ParsePost(sampleData));
         }
     }
 }

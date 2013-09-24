@@ -43,16 +43,20 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="With_ContentParser\Acceptance_Criteria\Case_of_complex_post_front_matter.cs" />
+    <Compile Include="With_ContentParser\Acceptance_Criteria\Case_of_simple_post_front_matter.cs" />
+    <Compile Include="With_ContentParser\For_ParsingData\When_post_front_matter_is_parsed.cs" />
+    <Compile Include="With_ContentParser\For_ParsingData\When_page_content_is_invalid.cs" />
     <Compile Include="With_Converter\For_Null\When_options_are_incorrect.cs" />
     <Compile Include="With_Converter\For_Null\When_parser_is_null.cs" />
     <Compile Include="With_Converter\For_Null\When_templater_is_null.cs" />
     <Compile Include="With_MarkdownParser\For_CorrectProcessing\When_content_is_valid.cs" />
     <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_empty.cs" />
     <Compile Include="With_MarkdownParser\For_NullOrEmpty\When_content_is_null.cs" />
-    <Compile Include="With_PageParser\Acceptance_Criteria\Case_of_complex_front_matter.cs" />
-    <Compile Include="With_PageParser\Acceptance_Criteria\Case_of_simple_front_matter.cs" />
-    <Compile Include="With_PageParser\For_ParsingData\When_content_is_invalid.cs" />
-    <Compile Include="With_PageParser\For_ParsingData\When_front_matter_is_parsed.cs" />
+    <Compile Include="With_ContentParser\Acceptance_Criteria\Case_of_complex_page_front_matter.cs" />
+    <Compile Include="With_ContentParser\Acceptance_Criteria\Case_of_simple_page_front_matter.cs" />
+    <Compile Include="With_ContentParser\For_ParsingData\When_post_content_is_invalid.cs" />
+    <Compile Include="With_ContentParser\For_ParsingData\When_page_front_matter_is_parsed.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

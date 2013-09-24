@@ -3,12 +3,12 @@ using DevTyr.Gullap.Yaml;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace DevTyr.Gullap.Tests.With_PageParser.For_ParsingData
+namespace DevTyr.Gullap.Tests.With_ContentParser.For_ParsingData
 {
     [TestFixture]
-    public class When_front_matter_is_parsed
+    public class When_page_front_matter_is_parsed
     {
-        readonly PageParser parser = new PageParser ();
+        readonly ContentParser parser = new ContentParser ();
 		readonly SampleYamlFrontMatter sample = new SampleYamlFrontMatter {
 			Text = 
 				"---" + Environment.NewLine +
@@ -23,7 +23,7 @@ namespace DevTyr.Gullap.Tests.With_PageParser.For_ParsingData
         [Test]
         public void Should_recognize_as_valid_front_matter ()
         {
-            var page = parser.Parse(sample.Text);
+            var page = parser.ParsePage(sample.Text);
             page.Title
                 .Should()
                 .NotBeNullOrEmpty();
@@ -32,7 +32,7 @@ namespace DevTyr.Gullap.Tests.With_PageParser.For_ParsingData
         [Test]
         public void Should_be_possible_to_retrieve_the_content()
         {
-            var page = parser.Parse(sample.Text);
+            var page = parser.ParsePage(sample.Text);
 
             page.Content
 				.Should ()

@@ -55,9 +55,11 @@
     <Compile Include="IO\FileSystem.cs" />
     <Compile Include="IO\WorkspaceFiles.cs" />
     <Compile Include="IO\WorkspaceInfo.cs" />
-    <Compile Include="Model\MetaPage.cs" />
-    <Compile Include="Model\MetaPageExtensions.cs" />
+    <Compile Include="Model\ContentBase.cs" />
+    <Compile Include="Model\MetaContent.cs" />
+    <Compile Include="Model\MetaContentExtensions.cs" />
     <Compile Include="Model\Page.cs" />
+    <Compile Include="Model\Post.cs" />
     <Compile Include="Model\SiteConfiguration.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="Parser\ParsedFileInfo.cs" />
@@ -71,7 +73,7 @@
     <Compile Include="SiteGenerator.cs" />
     <Compile Include="SitePaths.cs" />
     <Compile Include="Yaml\InvalidPageException.cs" />
-    <Compile Include="Yaml\PageParser.cs" />
+    <Compile Include="Yaml\ContentParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
