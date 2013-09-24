@@ -68,6 +68,8 @@ Here is an example of a valid front matter:
 
 Everything after the front matter is processed as page content.
 
+> `.html` and `.htm` files having no valid front matter won't be parsed, just copied.
+
 ## Variables available for templating
 
 Within your templates there are information on site level as well for the current page available. 
