@@ -177,6 +177,11 @@ namespace DevTyr.Gullap
 	    private void Copy(string file)
 	    {
             var targetDirectory = Path.GetDirectoryName(file.Replace(Paths.PagesPath, Paths.OutputPath).Replace(Paths.PostsPath, Paths.OutputPath));
+	        if (string.IsNullOrWhiteSpace(targetDirectory))
+	        {
+	            Trace.TraceWarning("Unable to evalaute target directory for {0}", file);
+	            return;
+	        }
 
 	        FileSystem.EnsureDirectory(targetDirectory);
 
