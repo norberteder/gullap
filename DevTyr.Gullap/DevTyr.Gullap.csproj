@@ -62,8 +62,6 @@
     <Compile Include="Model\Post.cs" />
     <Compile Include="Model\SiteConfiguration.cs" />
     <Compile Include="Parser\IParser.cs" />
-    <Compile Include="Parser\ParsedFileInfo.cs" />
-    <Compile Include="Parser\ParserKeys.cs" />
     <Compile Include="SiteConfigurationParser.cs" />
     <Compile Include="Templating\ITemplater.cs" />
     <Compile Include="Parser\Markdown\MarkdownParser.cs" />
