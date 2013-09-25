@@ -19,11 +19,6 @@ namespace DevTyr.Gullap.Model
             get { return yaml.title; }
         }
 
-        public string Description
-        {
-            get { return yaml.description; }
-        }
-
         public string Category
         {
             get { return yaml.category; }
@@ -63,11 +58,11 @@ namespace DevTyr.Gullap.Model
         public string Content { get; set; }
         public string Url { get; set; }
 
-        public object Meta
+        public dynamic Meta
         {
             get
             {
-                return ((DynamicYaml)yaml);
+                return yaml;
             }
         }
     }

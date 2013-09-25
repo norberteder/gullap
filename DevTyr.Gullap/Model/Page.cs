@@ -12,6 +12,11 @@ namespace DevTyr.Gullap.Model
         {
         }
 
+        public string Description
+        {
+            get { return Meta.description; }
+        }
+
         public List<Page> CategoryPages
         {
             get { return categoryPages; }
