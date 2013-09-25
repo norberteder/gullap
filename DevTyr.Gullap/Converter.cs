@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using DevTyr.Gullap.IO;
 using DevTyr.Gullap.Model;
 using DevTyr.Gullap.Parser;
@@ -131,7 +132,7 @@ namespace DevTyr.Gullap
                     config = Options.SiteConfiguration,
                     time = DateTime.Now,
                     pages = metaContents.Where(content => content.Page != null && !content.Page.Draft).Select(content => content.Page).ToArray(),
-                    posts = metaContents.Where(content => content.Post != null && !content.Post.Draft).Select(content => content.Post).ToArray(),
+                    posts = metaContents.Where(content => content.Post != null && !content.Post.Draft).Select(content => content.Post).OrderByDescending(post => post.Date).ToArray(),
                     pageCategories = metaContents.Where(content => content.Page != null && !string.IsNullOrWhiteSpace(content.Page.Category)).Select(t => new  { t.Page.Category, t.Page }).ToDictionary(arg => arg, arg => arg),
                     postCategories = metaContents.Where(content => content.Post != null && !string.IsNullOrWhiteSpace(content.Post.Category)).Select(t => new { t.Post.Category, t.Post}).ToDictionary(arg => arg, arg => arg)
                 },
