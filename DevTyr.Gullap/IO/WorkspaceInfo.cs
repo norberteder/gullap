@@ -28,7 +28,6 @@ namespace DevTyr.Gullap.IO
 
             var pageFiles = Directory.GetFiles(Paths.PagesPath, "*.*", SearchOption.AllDirectories);
             var postFiles = Directory.GetFiles(Paths.PostsPath, "*.*", SearchOption.AllDirectories);
-            Console.WriteLine("Found {0} posts", postFiles);
             var sourceFiles = pageFiles.Concat(postFiles);
 
             var pageParser = new ContentParser();
