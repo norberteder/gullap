@@ -59,6 +59,38 @@ namespace DevTyr.Gullap
             ConvertAllInternal();
 		}
 
+	    public void ConvertSingleFile(string fileName)
+	    {
+	        var workspaceInfo = new WorkspaceInfo(Paths);
+	        var workspaceFiles = workspaceInfo.GetContent(fileName);
+
+	        var fileContentToParse = workspaceFiles.FilesToParse.FirstOrDefault(item => item.FileName.Contains(fileName));
+
+            if (fileContentToParse == null)
+	        {
+                Trace.TraceError("Could not find contents for file {0}", fileName);
+	            return;
+	        }
+
+	        var contentsToParse = new List<MetaContent> {fileContentToParse};
+            FillCategoryPages(contentsToParse);
+
+            Trace.TraceInformation("Parsing contents for {0} files", contentsToParse.Count);
+
+            ParseContents(contentsToParse);
+
+            Trace.TraceInformation("Generating template data");
+            Trace.TraceInformation("Found {0} pages", contentsToParse.Count);
+
+            foreach (var content in contentsToParse)
+            {
+                dynamic metadata = content.Page != null ? ParseTemplateData(contentsToParse, content.Page) : ParseTemplateData(contentsToParse, content.Post);
+
+                Export(content, metadata);
+                Trace.TraceInformation("Exported {0}", content.FileName);
+            }
+	    }
+
 		private void CleanOutput ()
 		{
 			var files = Directory.GetFiles(Paths.OutputPath, "*.*", SearchOption.AllDirectories);

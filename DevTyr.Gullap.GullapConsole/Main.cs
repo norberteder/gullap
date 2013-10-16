@@ -36,6 +36,11 @@ namespace DevTyr.Gullap.GullapConsole
                     converter.ConvertAll();
                 }
 
+                if (!string.IsNullOrWhiteSpace(cmdOptions.FileToGenerate))
+                {
+                    converter.ConvertSingleFile(cmdOptions.FileToGenerate);
+                }
+
                 watch.Stop();
 
                 Console.WriteLine("");

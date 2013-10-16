@@ -25,7 +25,7 @@ namespace DevTyr.Gullap.GullapConsole
             }
 
         }
-        [Option('g', "generate", Required = false, HelpText = "Generate a site")]
+        [Option('g', "generate", Required = false, HelpText = "Generate whole site")]
         public bool GenerateSite { get; set; }
         [Option('f', "file", Required = false, HelpText = "File to generate")]
         public string FileToGenerate { get; set; }
