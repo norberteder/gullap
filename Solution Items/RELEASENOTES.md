@@ -5,6 +5,7 @@
 - Markdown and HTML files (html, htm) can be mixed. HTML files won't be parsed, just copied.
 - Added support of blog posts
 - Updated command line argument handling
+- Generate single files using the parameter `-f`
 
 **1.1.0**
 
