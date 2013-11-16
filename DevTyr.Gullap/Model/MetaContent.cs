@@ -20,7 +20,16 @@ namespace DevTyr.Gullap.Model
                 return Post.Template;
             return null;
         }
-
+		
+		public string GetOverriddenFileName() 
+		{
+			if (Page != null && !string.IsNullOrWhiteSpace(Page.FileName))
+				return Page.FileName;
+			if (Post != null && !string.IsNullOrWhiteSpace(Post.FileName))
+				return Post.FileName;
+			return null;
+		}
+		
         public bool HasValidTemplate()
         {
             return !string.IsNullOrWhiteSpace(GetTemplate());
