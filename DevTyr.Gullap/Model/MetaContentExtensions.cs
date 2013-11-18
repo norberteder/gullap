@@ -14,7 +14,7 @@ namespace DevTyr.Gullap.Model
 
             if (isPage)
             {
-                targetDirectory = Path.GetDirectoryName(targetFileName.Replace(paths.PagesPath, paths.OutputPath));
+                targetDirectory = Path.GetDirectoryName(content.FileName.Replace(paths.PagesPath, paths.OutputPath));
             }
             else
             {
