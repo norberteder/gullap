@@ -39,6 +39,11 @@ namespace DevTyr.Gullap.Model
             get { return yaml.tags; }
         }
 
+		public string FileName 
+		{
+			get { return yaml.filename; }
+		}
+		
         public string Template
         {
             get { return yaml.template; }
