@@ -58,6 +58,7 @@ Since version 1.1 Gullap uses a *YAML Front Matter* (as for example [Jekyll](htt
 	date			Creation/update date of the page
 	tags 			Keywords for your page
 	draft			Defines whether this page is in draft mode or not
+	filename		Target file name (e.g. rss.xml)
 
 The same attributes are available for posts, except `description`.
 
@@ -129,11 +130,3 @@ As an example see the template that is used to build the detail page including a
 	</div>
 
 > The complete templates and input files for [devtyr.com](http://www.devtyr.com "DevTyr") can be viewed [here](https://github.com/devtyr/devtyrcom "GitHub DevTyr Website Repository"). This should help you to get an overview of how Gullap works.
-
-## Future
-
-There are to great features I will work on:
-
-* Support of custom attributes. Define your own custom attributes within the YAML front matter and be able to use it within your templates.
-* Support of posts to be able to build a blog system
-
