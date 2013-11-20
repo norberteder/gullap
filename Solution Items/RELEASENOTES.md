@@ -1,5 +1,9 @@
 # RELEASE NOTES
 
+**1.3.0**
+
+- Support of custom target file names
+
 **1.2.0**
 
 - Markdown and HTML files (html, htm) can be mixed. HTML files won't be parsed, just copied.
