@@ -1,11 +1,14 @@
 using System;
+using System.IO;
 
-namespace DevTyr.Gullap
+namespace DevTyr.Gullap.Templating.Liquid
 {
-	public class LiquidTemplater
+	public class LiquidTemplater : ITemplater
 	{
-		public LiquidTemplater ()
+		public string Transform (string template, object content)
 		{
+			var parsedTemplate = DotLiquid.Template.Parse(template);
+			return parsedTemplate.Render();
 		}
 	}
 }

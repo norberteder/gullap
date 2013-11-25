@@ -19,6 +19,7 @@ namespace DevTyr.Gullap
 		private SitePaths Paths { get; set; }
 		private IParser internalParser = new MarkdownParser();
 		private ITemplater internalTemplater = new NustacheTemplater();
+		private TemplateReader templateReader = new TemplateReader();
 
 		public Converter (ConverterOptions options)
 		{
@@ -201,7 +202,8 @@ namespace DevTyr.Gullap
 
             FileSystem.EnsureDirectory(targetPath);
 
-		    var result = internalTemplater.Transform (Paths.TemplatePath, metaContent.GetTemplate(), metadata);
+			var template = templateReader.ReadTemplate(Paths.TemplatePath, metaContent.GetTemplate());
+		    var result = internalTemplater.Transform (template, metadata);
 
 		    File.WriteAllText (targetPath, result);
 		}

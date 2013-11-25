@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using DevTyr.Gullap.Templating;
 
 namespace DevTyr.Gullap.GullapConsole
 {
@@ -24,7 +25,20 @@ namespace DevTyr.Gullap.GullapConsole
                 watch.Start();
 
                 var converter = new Converter(options);
-
+				
+				if (!string.IsNullOrWhiteSpace(options.SiteConfiguration.Templater)) 
+				{
+					var templaterType = Type.GetType(options.SiteConfiguration.Templater, false, true);
+					if (templaterType != null) 
+					{
+						var templater = Activator.CreateInstance(templaterType) as ITemplater;
+						if (templater != null) 
+						{
+							converter.SetTemplater(templater);
+						}
+					}
+				}
+				
                 if (cmdOptions.InitializeSite)
                 {
                     converter.InitializeSite();
